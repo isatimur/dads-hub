@@ -1,55 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { PostCard } from "@/components/PostCard";
 import { CategoryList } from "@/components/CategoryList";
 import { Button } from "@/components/ui/button";
 import { PenSquare } from "lucide-react";
-
-const samplePosts = [
-  {
-    title: "How to handle tantrums mindfully?",
-    content: "My 3-year-old has been having intense tantrums lately. I want to handle them in a way that helps him learn emotional regulation. Any experienced dads have advice?",
-    author: "mindful_dad_2024",
-    category: "toddlers",
-    votes: 45,
-    comments: 23,
-    timeAgo: "2h ago"
-  },
-  {
-    title: "Building confidence in teenage daughter",
-    content: "Looking for ways to support my 14-year-old daughter's self-esteem. She's struggling with social media pressure and I want to help without being overbearing.",
-    author: "caring_father",
-    category: "teenagers",
-    votes: 89,
-    comments: 34,
-    timeAgo: "5h ago"
-  },
-  {
-    title: "Weekend activity ideas for single dads",
-    content: "Recently became a single dad to two boys (7 and 9). Looking for engaging weekend activities that don't break the bank. What works for you guys?",
-    author: "active_dad_123",
-    category: "activities",
-    votes: 67,
-    comments: 45,
-    timeAgo: "12h ago"
-  },
-  {
-    title: "Sleep training success story",
-    content: "After months of struggle, finally got my 6-month-old to sleep through the night. Here's what worked for us...",
-    author: "sleepy_dad",
-    category: "newborns",
-    votes: 120,
-    comments: 56,
-    timeAgo: "1d ago"
-  }
-];
+import { useSession } from "@supabase/auth-helpers-react";
+import { usePosts } from "@/hooks/usePosts";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const session = useSession();
+  const navigate = useNavigate();
+  const { data: posts, isLoading } = usePosts(selectedCategory);
 
-  const filteredPosts = selectedCategory === "all" 
-    ? samplePosts 
-    : samplePosts.filter(post => post.category === selectedCategory);
+  useEffect(() => {
+    if (!session) {
+      navigate("/auth");
+    }
+  }, [session, navigate]);
+
+  if (!session) return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -69,13 +40,30 @@ const Index = () => {
           
           <CategoryList onCategoryChange={setSelectedCategory} />
           
-          <div className="space-y-6">
-            {filteredPosts.map((post, index) => (
-              <PostCard key={index} {...post} />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="w-full h-48 bg-gray-200 animate-pulse rounded-lg" />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {posts?.map((post) => (
+                <PostCard
+                  key={post.id}
+                  title={post.title}
+                  content={post.content}
+                  author={post.author.username}
+                  category={post.category.name}
+                  votes={post.votes}
+                  comments={post.comments.length}
+                  timeAgo={new Date(post.created_at).toLocaleDateString()}
+                />
+              ))}
+            </div>
+          )}
 
-          {filteredPosts.length === 0 && (
+          {posts?.length === 0 && (
             <div className="text-center py-10 text-gray-500 animate-fade-in">
               <p className="text-lg mb-4">No posts found in this category yet.</p>
               <Button variant="outline">Create the first post</Button>
