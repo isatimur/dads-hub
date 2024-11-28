@@ -11,6 +11,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
+import { CreatePostDialog } from "./CreatePostDialog";
 
 export const Navbar = () => {
   const session = useSession();
@@ -57,7 +58,7 @@ export const Navbar = () => {
                   </span>
                 </Button>
                 
-                <Button variant="default" className="hidden md:flex">Create Post</Button>
+                <CreatePostDialog />
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

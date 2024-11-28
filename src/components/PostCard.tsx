@@ -1,10 +1,13 @@
 import { Heart, MessageSquare, Share2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@supabase/auth-helpers-react";
 
 interface PostCardProps {
+  id: string;
   title: string;
   content: string;
   author: string;
@@ -15,6 +18,7 @@ interface PostCardProps {
 }
 
 export const PostCard = ({
+  id,
   title,
   content,
   author,
@@ -25,16 +29,45 @@ export const PostCard = ({
 }: PostCardProps) => {
   const [votes, setVotes] = useState(initialVotes);
   const [hasVoted, setHasVoted] = useState(false);
+  const session = useSession();
 
-  const handleVote = () => {
-    if (hasVoted) {
-      setVotes((prev) => prev - 1);
-      setHasVoted(false);
-      toast.info("Vote removed");
-    } else {
-      setVotes((prev) => prev + 1);
-      setHasVoted(true);
-      toast.success("Post upvoted!");
+  useEffect(() => {
+    const channel = supabase
+      .channel('posts_votes')
+      .on('postgres_changes', { 
+        event: 'UPDATE', 
+        schema: 'public',
+        table: 'posts',
+        filter: `id=eq.${id}`
+      }, (payload: any) => {
+        setVotes(payload.new.votes);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id]);
+
+  const handleVote = async () => {
+    if (!session) {
+      toast.error("Please sign in to vote");
+      return;
+    }
+
+    try {
+      const newVotes = hasVoted ? votes - 1 : votes + 1;
+      const { error } = await supabase
+        .from('posts')
+        .update({ votes: newVotes })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setHasVoted(!hasVoted);
+      toast.success(hasVoted ? "Vote removed" : "Post upvoted!");
+    } catch (error) {
+      toast.error("Failed to update vote");
     }
   };
 
@@ -53,6 +86,10 @@ export const PostCard = ({
   };
 
   const handleComment = () => {
+    if (!session) {
+      toast.error("Please sign in to comment");
+      return;
+    }
     toast.info("Coming soon: Comments section!");
   };
 
