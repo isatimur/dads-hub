@@ -3,14 +3,21 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
         navigate("/");
+      } else if (event === "USER_UPDATED") {
+        // Handle email confirmation
+        if (session?.user.email_confirmed_at) {
+          toast.success("Email confirmed successfully!");
+          navigate("/");
+        }
       }
     });
 
@@ -23,6 +30,7 @@ const AuthPage = () => {
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900">Welcome to DadSpace</h2>
           <p className="mt-2 text-gray-600">Join our community of conscious fathers</p>
+          <p className="mt-2 text-sm text-gray-500">You will need to confirm your email address after signing up</p>
         </div>
         <Auth
           supabaseClient={supabase}
@@ -31,6 +39,13 @@ const AuthPage = () => {
           theme="light"
           redirectTo={`${window.location.origin}/auth/callback`}
           magicLink={false}
+          onError={(error) => {
+            if (error.message.includes("Email not confirmed")) {
+              toast.error("Please check your email and confirm your account before signing in");
+            } else {
+              toast.error(error.message);
+            }
+          }}
         />
       </div>
     </div>
