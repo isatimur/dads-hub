@@ -39,14 +39,11 @@ const AuthPage = () => {
           theme="light"
           redirectTo={`${window.location.origin}/auth/callback`}
           magicLink={false}
-          localization={{
-            variables: {
-              sign_in: {
-                email_input_placeholder: "Your email address",
-                password_input_placeholder: "Your password",
-                email_label: "Email",
-                password_label: "Password",
-              }
+          onError={(error) => {
+            if (error.message.includes("Email not confirmed")) {
+              toast.error("Please check your email and confirm your account before signing in");
+            } else {
+              toast.error(error.message);
             }
           }}
           showLinks={true}
