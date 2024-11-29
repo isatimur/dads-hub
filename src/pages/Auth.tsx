@@ -34,15 +34,14 @@ const AuthPage = () => {
               sign_up: {
                 email_label: "Email",
                 password_label: "Password",
-                username_label: "Username",
                 button_label: "Sign up",
               },
             },
           }}
           options={{
             emailRedirectTo: `${window.location.origin}/auth/callback`,
-            metadata: {
-              username: undefined // This will be filled by the Auth UI
+            data: {
+              username: '' // This will be filled by the trigger function
             }
           }}
         />
