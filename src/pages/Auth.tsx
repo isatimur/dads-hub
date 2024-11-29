@@ -29,6 +29,22 @@ const AuthPage = () => {
           appearance={{ theme: ThemeSupa }}
           providers={[]}
           theme="light"
+          localization={{
+            variables: {
+              sign_up: {
+                email_label: "Email",
+                password_label: "Password",
+                username_label: "Username",
+                button_label: "Sign up",
+              },
+            },
+          }}
+          options={{
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+            metadata: {
+              username: undefined // This will be filled by the Auth UI
+            }
+          }}
         />
       </div>
     </div>
