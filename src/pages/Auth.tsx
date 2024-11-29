@@ -39,13 +39,6 @@ const AuthPage = () => {
           theme="light"
           redirectTo={`${window.location.origin}/auth/callback`}
           magicLink={false}
-          onError={(error) => {
-            if (error.message.includes("Email not confirmed")) {
-              toast.error("Please check your email and confirm your account before signing in");
-            } else {
-              toast.error(error.message);
-            }
-          }}
           showLinks={true}
           onlyThirdPartyProviders={false}
         />
