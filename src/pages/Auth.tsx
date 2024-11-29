@@ -29,21 +29,8 @@ const AuthPage = () => {
           appearance={{ theme: ThemeSupa }}
           providers={[]}
           theme="light"
-          localization={{
-            variables: {
-              sign_up: {
-                email_label: "Email",
-                password_label: "Password",
-                button_label: "Sign up",
-              },
-            },
-          }}
-          options={{
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-            data: {
-              username: '' // This will be filled by the trigger function
-            }
-          }}
+          redirectTo={`${window.location.origin}/auth/callback`}
+          magicLink={false}
         />
       </div>
     </div>
