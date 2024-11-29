@@ -20,12 +20,14 @@ const formSchema = z.object({
   category_id: z.string().min(1, "Category is required"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export const CreatePostDialog = () => {
   const [open, setOpen] = useState(false);
   const session = useSession();
   const queryClient = useQueryClient();
   
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -34,14 +36,19 @@ export const CreatePostDialog = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!session?.user?.id) return;
+  const onSubmit = async (values: FormValues) => {
+    if (!session?.user?.id) {
+      toast.error("You must be logged in to create a post");
+      return;
+    }
 
     try {
       const { error } = await supabase
         .from("posts")
         .insert({
-          ...values,
+          title: values.title,
+          content: values.content,
+          category_id: values.category_id,
           author_id: session.user.id,
         });
 
@@ -53,6 +60,7 @@ export const CreatePostDialog = () => {
       form.reset();
     } catch (error) {
       toast.error("Failed to create post");
+      console.error("Error creating post:", error);
     }
   };
 

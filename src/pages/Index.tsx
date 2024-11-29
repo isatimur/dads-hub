@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { PostCard } from "@/components/PostCard";
 import { CategoryList } from "@/components/CategoryList";
-import { Button } from "@/components/ui/button";
-import { PenSquare } from "lucide-react";
+import { CreatePostDialog } from "@/components/CreatePostDialog";
 import { useSession } from "@supabase/auth-helpers-react";
 import { usePosts } from "@/hooks/usePosts";
 
@@ -32,10 +31,7 @@ const Index = () => {
               <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to DadSpace</h1>
               <p className="text-xl text-gray-600">A community for conscious fathers supporting each other.</p>
             </div>
-            <Button className="hidden md:flex items-center space-x-2">
-              <PenSquare className="w-4 h-4" />
-              <span>Create Post</span>
-            </Button>
+            <CreatePostDialog />
           </div>
           
           <CategoryList onCategoryChange={setSelectedCategory} />
@@ -51,6 +47,7 @@ const Index = () => {
               {posts?.map((post) => (
                 <PostCard
                   key={post.id}
+                  id={post.id}
                   title={post.title}
                   content={post.content}
                   author={post.author.username}
@@ -66,7 +63,7 @@ const Index = () => {
           {posts?.length === 0 && (
             <div className="text-center py-10 text-gray-500 animate-fade-in">
               <p className="text-lg mb-4">No posts found in this category yet.</p>
-              <Button variant="outline">Create the first post</Button>
+              <CreatePostDialog />
             </div>
           )}
         </div>
