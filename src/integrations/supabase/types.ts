@@ -75,6 +75,71 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          comment_id: string | null
+          content: string
+          created_at: string
+          id: string
+          post_id: string | null
+          read: boolean | null
+          recipient_id: string
+          sender_id: string | null
+          type: string
+        }
+        Insert: {
+          comment_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          read?: boolean | null
+          recipient_id: string
+          sender_id?: string | null
+          type: string
+        }
+        Update: {
+          comment_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          read?: boolean | null
+          recipient_id?: string
+          sender_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           author_id: string
