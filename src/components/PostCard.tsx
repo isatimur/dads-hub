@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@supabase/auth-helpers-react";
+import { CommentSection } from "./CommentSection";
 
 interface PostCardProps {
   id: string;
@@ -13,7 +14,7 @@ interface PostCardProps {
   author: string;
   category: string;
   votes: number;
-  comments: number;
+  comments: any[];
   timeAgo: string;
 }
 
@@ -30,6 +31,7 @@ export const PostCard = ({
   const [votes, setVotes] = useState(initialVotes);
   const [hasVoted, setHasVoted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const session = useSession();
 
   useEffect(() => {
@@ -100,10 +102,9 @@ export const PostCard = ({
       toast.error("Please sign in to comment");
       return;
     }
-    toast.info("Coming soon: Comments section!");
+    setShowComments(!showComments);
   };
 
-  // Format content with proper line breaks
   const formattedContent = content.split('\n').map((line, i) => (
     <p key={i} className="mb-2">{line}</p>
   ));
@@ -141,7 +142,7 @@ export const PostCard = ({
               onClick={handleComment}
             >
               <MessageSquare className="w-4 h-4" />
-              <span>{comments}</span>
+              <span>{comments?.length || 0}</span>
             </Button>
             <Button 
               variant="ghost" 
@@ -163,6 +164,10 @@ export const PostCard = ({
             Posted by <span className="font-medium text-gray-900">{author}</span>
           </div>
         </div>
+
+        {showComments && (
+          <CommentSection postId={id} comments={comments} />
+        )}
       </div>
     </Card>
   );

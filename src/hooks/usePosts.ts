@@ -15,6 +15,11 @@ export interface Post {
   };
   comments: {
     id: string;
+    content: string;
+    created_at: string;
+    author: {
+      username: string;
+    };
   }[];
 }
 
@@ -35,7 +40,12 @@ const fetchPosts = async (category?: string) => {
           *,
           author:profiles(username),
           category:categories(name),
-          comments(id)
+          comments(
+            id,
+            content,
+            created_at,
+            author:profiles(username)
+          )
         `)
         .eq("category_id", categoryData.id)
         .order("created_at", { ascending: false });
@@ -52,7 +62,12 @@ const fetchPosts = async (category?: string) => {
       *,
       author:profiles(username),
       category:categories(name),
-      comments(id)
+      comments(
+        id,
+        content,
+        created_at,
+        author:profiles(username)
+      )
     `)
     .order("created_at", { ascending: false });
 
