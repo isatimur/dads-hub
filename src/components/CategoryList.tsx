@@ -5,47 +5,56 @@ const categories = [
   {
     id: "all",
     label: "All",
-    icon: "📋"
+    icon: "📋",
+    description: "View all posts"
   },
   {
-    id: "newborns",
-    label: "Newborns",
-    icon: "👶"
+    id: "difficult-conversations",
+    label: "Difficult Conversations",
+    icon: "💭",
+    description: "Guide for handling challenging topics"
   },
   {
-    id: "toddlers",
-    label: "Toddlers",
-    icon: "🚶"
+    id: "emotional-support",
+    label: "Emotional Support",
+    icon: "❤️",
+    description: "Supporting emotional well-being"
   },
   {
-    id: "school-age",
-    label: "School Age",
-    icon: "🎒"
+    id: "behavioral-guidance",
+    label: "Behavioral Guidance",
+    icon: "🌟",
+    description: "Positive behavior strategies"
   },
   {
-    id: "teenagers",
-    label: "Teenagers",
-    icon: "🧑"
+    id: "educational-development",
+    label: "Educational",
+    icon: "📚",
+    description: "Support learning journey"
   },
   {
-    id: "communication",
-    label: "Communication",
-    icon: "💭"
+    id: "social-skills",
+    label: "Social Skills",
+    icon: "🤝",
+    description: "Develop healthy relationships"
   },
   {
-    id: "self-care",
-    label: "Self Care",
-    icon: "🧘"
+    id: "mental-health",
+    label: "Mental Health",
+    icon: "🧠",
+    description: "Mental well-being support"
   },
   {
-    id: "co-parenting",
-    label: "Co-Parenting",
-    icon: "👥"
+    id: "crisis-management",
+    label: "Crisis Management",
+    icon: "🆘",
+    description: "Handle difficult situations"
   },
   {
-    id: "activities",
-    label: "Activities",
-    icon: "🎨"
+    id: "age-specific-guidance",
+    label: "Age-Specific",
+    icon: "👶",
+    description: "Age-tailored advice"
   }
 ];
 
@@ -63,20 +72,21 @@ export const CategoryList = ({ onCategoryChange }: CategoryListProps) => {
 
   return (
     <div className="w-full overflow-x-auto pb-4 mb-6 animate-fade-in">
-      <div className="flex space-x-2 p-1">
-        {categories.map(({ id, label, icon }) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-1">
+        {categories.map(({ id, label, icon, description }) => (
           <Button
             key={id}
             variant={id === activeCategory ? "default" : "outline"}
             className={`
-              whitespace-nowrap transition-all duration-300
-              hover:scale-105 hover:shadow-md
+              h-auto py-3 px-4 flex flex-col items-center text-center
+              transition-all duration-300 hover:scale-105 hover:shadow-md
               ${id === activeCategory ? 'ring-2 ring-primary/20' : ''}
             `}
             onClick={() => handleCategoryClick(id)}
           >
-            <span className="mr-2">{icon}</span>
-            {label}
+            <span className="text-2xl mb-2">{icon}</span>
+            <span className="font-medium mb-1">{label}</span>
+            <span className="text-xs text-muted-foreground">{description}</span>
           </Button>
         ))}
       </div>

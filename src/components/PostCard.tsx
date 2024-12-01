@@ -1,4 +1,4 @@
-import { Heart, MessageSquare, Share2 } from "lucide-react";
+import { Heart, MessageSquare, Share2, Bookmark } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { useState, useEffect } from "react";
@@ -29,6 +29,7 @@ export const PostCard = ({
 }: PostCardProps) => {
   const [votes, setVotes] = useState(initialVotes);
   const [hasVoted, setHasVoted] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const session = useSession();
 
   useEffect(() => {
@@ -71,6 +72,15 @@ export const PostCard = ({
     }
   };
 
+  const handleSave = () => {
+    if (!session) {
+      toast.error("Please sign in to save posts");
+      return;
+    }
+    setIsSaved(!isSaved);
+    toast.success(isSaved ? "Post removed from saved items" : "Post saved for later");
+  };
+
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -93,20 +103,27 @@ export const PostCard = ({
     toast.info("Coming soon: Comments section!");
   };
 
+  // Format content with proper line breaks
+  const formattedContent = content.split('\n').map((line, i) => (
+    <p key={i} className="mb-2">{line}</p>
+  ));
+
   return (
     <Card className="w-full mb-4 overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-up">
       <div className="p-6">
-        <div className="flex items-center space-x-2 mb-4">
+        <div className="flex items-center justify-between mb-4">
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
             {category}
           </span>
-          <span className="text-sm text-gray-500">• {timeAgo}</span>
+          <span className="text-sm text-gray-500">{timeAgo}</span>
         </div>
         
-        <h3 className="text-xl font-semibold mb-2 text-gray-900">{title}</h3>
-        <p className="text-gray-600 mb-4">{content}</p>
+        <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
+        <div className="prose prose-sm max-w-none text-gray-600 mb-4">
+          {formattedContent}
+        </div>
         
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-t pt-4 mt-4">
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
@@ -132,6 +149,14 @@ export const PostCard = ({
               onClick={handleShare}
             >
               <Share2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSave}
+              className={isSaved ? 'text-primary' : ''}
+            >
+              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
             </Button>
           </div>
           <div className="text-sm text-gray-500">
