@@ -50,10 +50,10 @@ const Index = () => {
                   id={post.id}
                   title={post.title}
                   content={post.content}
-                  author={post.author.username}
-                  category={post.category.name}
+                  author={post.author?.username || 'Anonymous'}
+                  category={post.category?.name || 'Uncategorized'}
                   votes={post.votes}
-                  comments={post.comments.length}
+                  comments={post.comments?.length || 0}
                   timeAgo={new Date(post.created_at).toLocaleDateString()}
                 />
               ))}
