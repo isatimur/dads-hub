@@ -53,7 +53,7 @@ const Index = () => {
                   author={post.author?.username || 'Anonymous'}
                   category={post.category?.name || 'Uncategorized'}
                   votes={post.votes}
-                  comments={post.comments?.length || 0}
+                  comments={post.comments || []}
                   timeAgo={new Date(post.created_at).toLocaleDateString()}
                 />
               ))}

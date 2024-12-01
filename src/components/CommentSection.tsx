@@ -21,7 +21,7 @@ interface CommentSectionProps {
   comments: Comment[];
 }
 
-export const CommentSection = ({ postId, comments }: CommentSectionProps) => {
+export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState("");
   const session = useSession();
   const queryClient = useQueryClient();
@@ -73,7 +73,7 @@ export const CommentSection = ({ postId, comments }: CommentSectionProps) => {
       </form>
 
       <div className="space-y-4 mt-6">
-        {comments?.map((comment) => (
+        {Array.isArray(comments) && comments.map((comment) => (
           <Card key={comment.id} className="p-4">
             <div className="flex justify-between items-start mb-2">
               <span className="font-medium">
