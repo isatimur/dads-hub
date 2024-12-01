@@ -19,7 +19,34 @@ export interface Post {
 }
 
 const fetchPosts = async (category?: string) => {
-  let query = supabase
+  if (category && category !== "all") {
+    // First get the category ID
+    const { data: categoryData } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("slug", category)
+      .single();
+
+    if (categoryData) {
+      // Then use the category ID to filter posts
+      const { data, error } = await supabase
+        .from("posts")
+        .select(`
+          *,
+          author:profiles(username),
+          category:categories(name),
+          comments(id)
+        `)
+        .eq("category_id", categoryData.id)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      return data as Post[];
+    }
+  }
+
+  // If no category or category is "all", fetch all posts
+  const { data, error } = await supabase
     .from("posts")
     .select(`
       *,
@@ -28,12 +55,6 @@ const fetchPosts = async (category?: string) => {
       comments(id)
     `)
     .order("created_at", { ascending: false });
-
-  if (category && category !== "all") {
-    query = query.eq("category.slug", category);
-  }
-
-  const { data, error } = await query;
 
   if (error) throw error;
   return data as Post[];
