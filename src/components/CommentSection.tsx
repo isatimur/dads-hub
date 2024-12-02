@@ -6,6 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { Comment } from "./Comment";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { MessageSquare } from "lucide-react";
 
 interface CommentType {
   id: string;
@@ -54,7 +55,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
       if (error) throw error;
 
-      toast.success("Comment added successfully!");
+      toast.success(replyingTo ? "Reply added successfully!" : "Comment added successfully!");
       setNewComment("");
       setReplyingTo(null);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
@@ -87,19 +88,26 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
   return (
     <div className="space-y-4 mt-6">
+      <div className="flex items-center gap-2 mb-4">
+        <MessageSquare className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold">
+          {replyingTo ? "Write a Reply" : "Leave a Comment"}
+        </h3>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Textarea
           placeholder={
             replyingTo
-              ? "Write a reply..."
-              : "Write a comment..."
+              ? "Write your reply here..."
+              : "Share your thoughts..."
           }
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           className="min-h-[100px]"
         />
         <div className="flex space-x-2">
-          <Button type="submit">
+          <Button type="submit" className="bg-primary hover:bg-primary/90">
             {replyingTo ? "Post Reply" : "Post Comment"}
           </Button>
           {replyingTo && (
@@ -114,7 +122,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
         </div>
       </form>
 
-      <div className="space-y-4">
+      <div className="space-y-6 mt-8">
         {Object.values(threadedComments).map((thread: any) => (
           <div key={thread.id} className="space-y-4">
             <Comment
@@ -122,7 +130,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               onReply={handleReply}
               postId={postId}
             />
-            <div className="ml-8 space-y-4 border-l-2 border-gray-200 pl-4">
+            <div className="ml-8 space-y-4 border-l-2 border-primary/20 pl-4">
               {thread.replies.map((reply: CommentType) => (
                 <Comment
                   key={reply.id}

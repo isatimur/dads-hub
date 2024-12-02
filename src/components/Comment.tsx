@@ -113,9 +113,9 @@ export const Comment = ({
   };
 
   return (
-    <Card className={`p-4 ${parentId ? "border-l-4 border-primary/20" : ""}`}>
+    <Card className={`p-4 ${parentId ? "border-l-4 border-primary/20 bg-primary/5" : ""}`}>
       <div className="flex justify-between items-start mb-2">
-        <span className="font-medium">{author?.username || "Anonymous"}</span>
+        <span className="font-medium text-primary">{author?.username || "Anonymous"}</span>
         <span className="text-sm text-gray-500">
           {new Date(created_at).toLocaleDateString()}
         </span>
@@ -145,16 +145,16 @@ export const Comment = ({
         </div>
       ) : (
         <>
-          <p className="text-gray-700 mb-4">{content}</p>
+          <p className="text-gray-700 mb-4 whitespace-pre-wrap">{content}</p>
           <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
               size="sm"
-              className={`${hasReacted ? "text-primary" : ""}`}
+              className={`${hasReacted ? 'text-primary' : ''} hover:bg-primary/10`}
               onClick={handleReaction}
             >
               <Heart
-                className={`w-4 h-4 mr-1 ${hasReacted ? "fill-current" : ""}`}
+                className={`w-4 h-4 mr-1 ${hasReacted ? 'fill-current' : ''}`}
               />
               {reactions?.length || 0}
             </Button>
@@ -162,7 +162,7 @@ export const Comment = ({
               variant="ghost"
               size="sm"
               onClick={() => onReply(id)}
-              className="hover:bg-primary/10"
+              className="hover:bg-primary/10 text-primary"
             >
               <Reply className="w-4 h-4 mr-1" />
               Reply
@@ -173,6 +173,7 @@ export const Comment = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsEditing(true)}
+                  className="hover:bg-primary/10"
                 >
                   <Edit2 className="w-4 h-4 mr-1" />
                   Edit
@@ -181,6 +182,7 @@ export const Comment = ({
                   variant="ghost"
                   size="sm"
                   onClick={handleDelete}
+                  className="hover:bg-destructive/10 text-destructive"
                 >
                   <Trash2 className="w-4 h-4 mr-1" />
                   Delete
