@@ -13,6 +13,7 @@ interface CommentProps {
   content: string;
   author: {
     username: string;
+    id: string;  // Added this line to fix the error
   };
   created_at: string;
   onReply: (parentId: string) => void;
