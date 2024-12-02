@@ -122,15 +122,17 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               onReply={handleReply}
               postId={postId}
             />
-            {thread.replies.map((reply: CommentType) => (
-              <Comment
-                key={reply.id}
-                {...reply}
-                onReply={handleReply}
-                postId={postId}
-                parentId={thread.id}
-              />
-            ))}
+            <div className="ml-8 space-y-4 border-l-2 border-gray-200 pl-4">
+              {thread.replies.map((reply: CommentType) => (
+                <Comment
+                  key={reply.id}
+                  {...reply}
+                  onReply={handleReply}
+                  postId={postId}
+                  parentId={thread.id}
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>

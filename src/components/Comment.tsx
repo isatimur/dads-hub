@@ -13,7 +13,7 @@ interface CommentProps {
   content: string;
   author: {
     username: string;
-    id: string;  // Added this line to fix the error
+    id: string;
   };
   created_at: string;
   onReply: (parentId: string) => void;
@@ -113,7 +113,7 @@ export const Comment = ({
   };
 
   return (
-    <Card className={`p-4 ${parentId ? "ml-8" : ""}`}>
+    <Card className={`p-4 ${parentId ? "border-l-4 border-primary/20" : ""}`}>
       <div className="flex justify-between items-start mb-2">
         <span className="font-medium">{author?.username || "Anonymous"}</span>
         <span className="text-sm text-gray-500">
@@ -162,6 +162,7 @@ export const Comment = ({
               variant="ghost"
               size="sm"
               onClick={() => onReply(id)}
+              className="hover:bg-primary/10"
             >
               <Reply className="w-4 h-4 mr-1" />
               Reply
