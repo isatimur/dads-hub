@@ -87,7 +87,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
   }, {});
 
   return (
-    <div className="space-y-4 mt-6">
+    <div className="space-y-4 mt-6 animate-fade-in">
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-primary" />
         <h3 className="text-lg font-semibold">
@@ -129,6 +129,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               {...thread}
               onReply={handleReply}
               postId={postId}
+              isReplyingTo={replyingTo === thread.id}
             />
             <div className="ml-8 space-y-4 border-l-2 border-primary/20 pl-4">
               {thread.replies.map((reply: CommentType) => (
@@ -138,6 +139,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
                   onReply={handleReply}
                   postId={postId}
                   parentId={thread.id}
+                  isReplyingTo={replyingTo === reply.id}
                 />
               ))}
             </div>

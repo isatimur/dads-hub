@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Heart, Reply, Edit2, Trash2, Check, X } from "lucide-react";
+import { Heart, Reply, Edit2, Trash2, Check, X, MessageCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
@@ -20,6 +20,7 @@ interface CommentProps {
   postId: string;
   parentId?: string;
   reactions: any[];
+  isReplyingTo?: boolean;
 }
 
 export const Comment = ({
@@ -31,6 +32,7 @@ export const Comment = ({
   postId,
   parentId,
   reactions,
+  isReplyingTo,
 }: CommentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
@@ -113,9 +115,16 @@ export const Comment = ({
   };
 
   return (
-    <Card className={`p-4 ${parentId ? "border-l-4 border-primary/20 bg-primary/5" : ""}`}>
+    <Card 
+      className={`p-4 ${parentId ? "border-l-4 border-primary/20 bg-primary/5" : ""} 
+        ${isReplyingTo ? "ring-2 ring-primary/50 bg-primary/5" : ""} 
+        transition-all duration-200`}
+    >
       <div className="flex justify-between items-start mb-2">
-        <span className="font-medium text-primary">{author?.username || "Anonymous"}</span>
+        <div className="flex items-center gap-2">
+          <MessageCircle className="w-4 h-4 text-primary" />
+          <span className="font-medium text-primary">{author?.username || "Anonymous"}</span>
+        </div>
         <span className="text-sm text-gray-500">
           {new Date(created_at).toLocaleDateString()}
         </span>
