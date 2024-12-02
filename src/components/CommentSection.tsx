@@ -104,10 +104,10 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
           }
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className="min-h-[100px]"
+          className="min-h-[100px] transition-all duration-200 focus:ring-2 focus:ring-primary/50"
         />
         <div className="flex space-x-2">
-          <Button type="submit" className="bg-primary hover:bg-primary/90">
+          <Button type="submit" className="bg-primary hover:bg-primary/90 transition-all duration-200">
             {replyingTo ? "Post Reply" : "Post Comment"}
           </Button>
           {replyingTo && (
@@ -115,6 +115,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               type="button"
               variant="outline"
               onClick={() => setReplyingTo(null)}
+              className="transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
             >
               Cancel Reply
             </Button>
@@ -124,7 +125,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
       <div className="space-y-6 mt-8">
         {Object.values(threadedComments).map((thread: any) => (
-          <div key={thread.id} className="space-y-4">
+          <div key={thread.id} className="space-y-4 animate-fade-up">
             <Comment
               {...thread}
               onReply={handleReply}

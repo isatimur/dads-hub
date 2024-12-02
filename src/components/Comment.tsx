@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Heart, Reply, Edit2, Trash2, Check, X, MessageCircle } from "lucide-react";
-import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CommentHeader } from "./comment/CommentHeader";
+import { CommentActions } from "./comment/CommentActions";
+import { CommentEditor } from "./comment/CommentEditor";
 
 interface CommentProps {
   id: string;
@@ -118,87 +118,29 @@ export const Comment = ({
     <Card 
       className={`p-4 ${parentId ? "border-l-4 border-primary/20 bg-primary/5" : ""} 
         ${isReplyingTo ? "ring-2 ring-primary/50 bg-primary/5" : ""} 
-        transition-all duration-200`}
+        transition-all duration-200 hover:shadow-md`}
     >
-      <div className="flex justify-between items-start mb-2">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="w-4 h-4 text-primary" />
-          <span className="font-medium text-primary">{author?.username || "Anonymous"}</span>
-        </div>
-        <span className="text-sm text-gray-500">
-          {new Date(created_at).toLocaleDateString()}
-        </span>
-      </div>
+      <CommentHeader author={author} created_at={created_at} />
 
       {isEditing ? (
-        <div className="space-y-2">
-          <Textarea
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-            className="min-h-[100px]"
-          />
-          <div className="flex space-x-2">
-            <Button size="sm" onClick={handleEdit}>
-              <Check className="w-4 h-4 mr-2" />
-              Save
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setIsEditing(false)}
-            >
-              <X className="w-4 h-4 mr-2" />
-              Cancel
-            </Button>
-          </div>
-        </div>
+        <CommentEditor
+          content={editedContent}
+          onChange={setEditedContent}
+          onSave={handleEdit}
+          onCancel={() => setIsEditing(false)}
+        />
       ) : (
         <>
           <p className="text-gray-700 mb-4 whitespace-pre-wrap">{content}</p>
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`${hasReacted ? 'text-primary' : ''} hover:bg-primary/10`}
-              onClick={handleReaction}
-            >
-              <Heart
-                className={`w-4 h-4 mr-1 ${hasReacted ? 'fill-current' : ''}`}
-              />
-              {reactions?.length || 0}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onReply(id)}
-              className="hover:bg-primary/10 text-primary"
-            >
-              <Reply className="w-4 h-4 mr-1" />
-              Reply
-            </Button>
-            {session?.user?.id === author?.id && (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsEditing(true)}
-                  className="hover:bg-primary/10"
-                >
-                  <Edit2 className="w-4 h-4 mr-1" />
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleDelete}
-                  className="hover:bg-destructive/10 text-destructive"
-                >
-                  <Trash2 className="w-4 h-4 mr-1" />
-                  Delete
-                </Button>
-              </>
-            )}
-          </div>
+          <CommentActions
+            hasReacted={hasReacted}
+            reactionCount={reactions?.length || 0}
+            onReaction={handleReaction}
+            onReply={() => onReply(id)}
+            onEdit={() => setIsEditing(true)}
+            onDelete={handleDelete}
+            showModifyActions={session?.user?.id === author?.id}
+          />
         </>
       )}
     </Card>
