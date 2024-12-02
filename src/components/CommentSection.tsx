@@ -3,26 +3,30 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { Card } from "./ui/card";
+import { Comment } from "./Comment";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-interface Comment {
+interface CommentType {
   id: string;
   content: string;
   created_at: string;
   author: {
     username: string;
+    id: string;
   };
+  parent_id: string | null;
+  reactions: any[];
 }
 
 interface CommentSectionProps {
   postId: string;
-  comments: Comment[];
+  comments: CommentType[];
 }
 
 export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState("");
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const session = useSession();
   const queryClient = useQueryClient();
 
@@ -45,12 +49,14 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
           content: newComment.trim(),
           post_id: postId,
           author_id: session.user.id,
+          parent_id: replyingTo,
         });
 
       if (error) throw error;
 
       toast.success("Comment added successfully!");
       setNewComment("");
+      setReplyingTo(null);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
       toast.error("Failed to add comment");
@@ -58,33 +64,74 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
     }
   };
 
+  const handleReply = (parentId: string) => {
+    if (!session) {
+      toast.error("Please sign in to reply");
+      return;
+    }
+    setReplyingTo(parentId);
+  };
+
+  // Organize comments into threads
+  const threadedComments = comments.reduce((acc: any, comment) => {
+    if (!comment.parent_id) {
+      acc[comment.id] = {
+        ...comment,
+        replies: [],
+      };
+    } else if (acc[comment.parent_id]) {
+      acc[comment.parent_id].replies.push(comment);
+    }
+    return acc;
+  }, {});
+
   return (
     <div className="space-y-4 mt-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Textarea
-          placeholder="Write a comment..."
+          placeholder={
+            replyingTo
+              ? "Write a reply..."
+              : "Write a comment..."
+          }
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           className="min-h-[100px]"
         />
-        <Button type="submit" className="w-full">
-          Post Comment
-        </Button>
+        <div className="flex space-x-2">
+          <Button type="submit">
+            {replyingTo ? "Post Reply" : "Post Comment"}
+          </Button>
+          {replyingTo && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setReplyingTo(null)}
+            >
+              Cancel Reply
+            </Button>
+          )}
+        </div>
       </form>
 
-      <div className="space-y-4 mt-6">
-        {Array.isArray(comments) && comments.map((comment) => (
-          <Card key={comment.id} className="p-4">
-            <div className="flex justify-between items-start mb-2">
-              <span className="font-medium">
-                {comment.author?.username || "Anonymous"}
-              </span>
-              <span className="text-sm text-gray-500">
-                {new Date(comment.created_at).toLocaleDateString()}
-              </span>
-            </div>
-            <p className="text-gray-700">{comment.content}</p>
-          </Card>
+      <div className="space-y-4">
+        {Object.values(threadedComments).map((thread: any) => (
+          <div key={thread.id} className="space-y-4">
+            <Comment
+              {...thread}
+              onReply={handleReply}
+              postId={postId}
+            />
+            {thread.replies.map((reply: CommentType) => (
+              <Comment
+                key={reply.id}
+                {...reply}
+                onReply={handleReply}
+                postId={postId}
+                parentId={thread.id}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </div>
