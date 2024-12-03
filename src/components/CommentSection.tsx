@@ -6,7 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { Comment } from "./Comment";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MessageSquare, Send } from "lucide-react";
+import { MessageSquare, Send, Sparkles } from "lucide-react";
 
 interface CommentType {
   id: string;
@@ -28,6 +28,7 @@ interface CommentSectionProps {
 export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const session = useSession();
   const queryClient = useQueryClient();
 
@@ -55,9 +56,12 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
       if (error) throw error;
 
-      toast.success(replyingTo ? "Reply added successfully!" : "Comment added successfully!");
+      toast.success(replyingTo ? "Reply added successfully!" : "Comment added successfully!", {
+        icon: <Sparkles className="w-4 h-4 text-primary animate-pulse" />,
+      });
       setNewComment("");
       setReplyingTo(null);
+      setIsTyping(false);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
       toast.error("Failed to add comment");
@@ -89,30 +93,39 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
   return (
     <div className="space-y-4 mt-6 animate-fade-in">
       <div className="flex items-center gap-2 mb-4">
-        <MessageSquare className="w-5 h-5 text-primary" />
-        <h3 className="text-lg font-semibold">
+        <MessageSquare className="w-5 h-5 text-primary animate-pulse" />
+        <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
           {replyingTo ? "Write a Reply" : "Leave a Comment"}
         </h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="relative">
+        <div className="relative group">
           <Textarea
             placeholder={
               replyingTo
-                ? "Write your reply here..."
-                : "Share your thoughts..."
+                ? "Write your thoughtful reply here..."
+                : "Share your thoughts with the community..."
             }
             value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            className="min-h-[100px] pr-12 transition-all duration-200 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+            onChange={(e) => {
+              setNewComment(e.target.value);
+              setIsTyping(e.target.value.length > 0);
+            }}
+            className={`min-h-[100px] pr-12 transition-all duration-300 
+              ${isTyping ? 'ring-2 ring-primary/50' : 'hover:border-primary/50'}
+              focus:ring-2 focus:ring-primary/50 focus:border-transparent
+              placeholder:text-muted-foreground/70`}
           />
           <Button
             type="submit"
             size="icon"
-            className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 transition-all duration-200"
+            className={`absolute bottom-3 right-3 bg-primary hover:bg-primary/90 
+              transition-all duration-300 transform
+              ${isTyping ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
+              group-hover:scale-100 group-hover:opacity-100`}
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </Button>
         </div>
         {replyingTo && (
@@ -120,16 +133,20 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
             type="button"
             variant="outline"
             onClick={() => setReplyingTo(null)}
-            className="transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
+            className="transition-all duration-200 hover:bg-destructive/10 hover:text-destructive group"
           >
             Cancel Reply
+            <span className="ml-1 transition-transform duration-200 group-hover:rotate-90">×</span>
           </Button>
         )}
       </form>
 
       <div className="space-y-6 mt-8">
         {Object.values(threadedComments).map((thread: any) => (
-          <div key={thread.id} className="space-y-4 animate-fade-up">
+          <div 
+            key={thread.id} 
+            className="space-y-4 animate-fade-up hover:bg-primary/5 p-2 rounded-lg transition-colors duration-200"
+          >
             <Comment
               {...thread}
               onReply={handleReply}

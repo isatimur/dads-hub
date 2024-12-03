@@ -25,17 +25,16 @@ export const CommentActions = ({
       <Button
         variant="ghost"
         size="sm"
-        className={`group transition-all duration-200 ${
-          hasReacted ? "text-primary" : "hover:text-primary"
-        }`}
+        className={`group transition-all duration-300 hover:scale-105 
+          ${hasReacted ? "text-primary bg-primary/10" : "hover:text-primary hover:bg-primary/5"}`}
         onClick={onReaction}
       >
         <Heart
-          className={`w-4 h-4 mr-1 transition-all duration-200 ${
-            hasReacted
-              ? "fill-current"
-              : "group-hover:fill-primary/20"
-          }`}
+          className={`w-4 h-4 mr-1 transition-all duration-300 
+            ${hasReacted
+              ? "fill-current animate-scale-in"
+              : "group-hover:fill-primary/20 group-hover:scale-110"
+            }`}
         />
         <span className="font-medium">{reactionCount}</span>
       </Button>
@@ -43,9 +42,11 @@ export const CommentActions = ({
         variant="ghost"
         size="sm"
         onClick={onReply}
-        className="group hover:bg-primary/10 text-primary font-medium transition-all duration-200 hover:scale-105"
+        className="group hover:bg-primary/10 text-primary font-medium 
+          transition-all duration-300 hover:scale-105"
       >
-        <Reply className="w-4 h-4 mr-1 transition-transform duration-200 group-hover:-translate-y-0.5" />
+        <Reply className="w-4 h-4 mr-1 transition-transform duration-300 
+          group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" />
         Reply
       </Button>
       {showModifyActions && (
@@ -54,18 +55,21 @@ export const CommentActions = ({
             variant="ghost"
             size="sm"
             onClick={onEdit}
-            className="group hover:bg-primary/10 transition-all duration-200"
+            className="group hover:bg-primary/10 transition-all duration-300 hover:scale-105"
           >
-            <Edit2 className="w-4 h-4 mr-1 transition-transform duration-200 group-hover:rotate-12" />
+            <Edit2 className="w-4 h-4 mr-1 transition-transform duration-300 
+              group-hover:rotate-12" />
             Edit
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={onDelete}
-            className="group hover:bg-destructive/10 text-destructive transition-all duration-200"
+            className="group hover:bg-destructive/10 text-destructive 
+              transition-all duration-300 hover:scale-105"
           >
-            <Trash2 className="w-4 h-4 mr-1 transition-transform duration-200 group-hover:scale-110" />
+            <Trash2 className="w-4 h-4 mr-1 transition-transform duration-300 
+              group-hover:rotate-12" />
             Delete
           </Button>
         </>
