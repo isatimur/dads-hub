@@ -16,19 +16,29 @@ export const CommentEditor = ({
   onCancel,
 }: CommentEditorProps) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3 animate-fade-in">
       <Textarea
         value={content}
         onChange={(e) => onChange(e.target.value)}
-        className="min-h-[100px]"
+        className="min-h-[100px] transition-all duration-200 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+        placeholder="Edit your comment..."
       />
-      <div className="flex space-x-2">
-        <Button size="sm" onClick={onSave}>
-          <Check className="w-4 h-4 mr-2" />
+      <div className="flex gap-2">
+        <Button
+          size="sm"
+          onClick={onSave}
+          className="bg-primary hover:bg-primary/90 transition-all duration-200 group"
+        >
+          <Check className="w-4 h-4 mr-2 transition-transform duration-200 group-hover:scale-110" />
           Save
         </Button>
-        <Button size="sm" variant="outline" onClick={onCancel}>
-          <X className="w-4 h-4 mr-2" />
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onCancel}
+          className="group hover:bg-destructive/10 hover:text-destructive transition-all duration-200"
+        >
+          <X className="w-4 h-4 mr-2 transition-transform duration-200 group-hover:rotate-90" />
           Cancel
         </Button>
       </div>

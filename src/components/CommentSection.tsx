@@ -6,7 +6,7 @@ import { Textarea } from "./ui/textarea";
 import { Comment } from "./Comment";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Send } from "lucide-react";
 
 interface CommentType {
   id: string;
@@ -96,31 +96,35 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Textarea
-          placeholder={
-            replyingTo
-              ? "Write your reply here..."
-              : "Share your thoughts..."
-          }
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          className="min-h-[100px] transition-all duration-200 focus:ring-2 focus:ring-primary/50"
-        />
-        <div className="flex space-x-2">
-          <Button type="submit" className="bg-primary hover:bg-primary/90 transition-all duration-200">
-            {replyingTo ? "Post Reply" : "Post Comment"}
+        <div className="relative">
+          <Textarea
+            placeholder={
+              replyingTo
+                ? "Write your reply here..."
+                : "Share your thoughts..."
+            }
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="min-h-[100px] pr-12 transition-all duration-200 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+          />
+          <Button
+            type="submit"
+            size="icon"
+            className="absolute bottom-3 right-3 bg-primary hover:bg-primary/90 transition-all duration-200"
+          >
+            <Send className="w-4 h-4" />
           </Button>
-          {replyingTo && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setReplyingTo(null)}
-              className="transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
-            >
-              Cancel Reply
-            </Button>
-          )}
         </div>
+        {replyingTo && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setReplyingTo(null)}
+            className="transition-all duration-200 hover:bg-destructive/10 hover:text-destructive"
+          >
+            Cancel Reply
+          </Button>
+        )}
       </form>
 
       <div className="space-y-6 mt-8">
@@ -132,18 +136,20 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               postId={postId}
               isReplyingTo={replyingTo === thread.id}
             />
-            <div className="ml-8 space-y-4 border-l-2 border-primary/20 pl-4">
-              {thread.replies.map((reply: CommentType) => (
-                <Comment
-                  key={reply.id}
-                  {...reply}
-                  onReply={handleReply}
-                  postId={postId}
-                  parentId={thread.id}
-                  isReplyingTo={replyingTo === reply.id}
-                />
-              ))}
-            </div>
+            {thread.replies.length > 0 && (
+              <div className="ml-8 space-y-4 border-l-2 border-primary/20 pl-4 animate-fade-in">
+                {thread.replies.map((reply: CommentType) => (
+                  <Comment
+                    key={reply.id}
+                    {...reply}
+                    onReply={handleReply}
+                    postId={postId}
+                    parentId={thread.id}
+                    isReplyingTo={replyingTo === reply.id}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>
