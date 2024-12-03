@@ -116,9 +116,10 @@ export const Comment = ({
 
   return (
     <Card 
-      className={`p-4 ${parentId ? "border-l-4 border-primary/20 bg-primary/5" : ""} 
-        ${isReplyingTo ? "ring-2 ring-primary/50 bg-primary/5" : ""} 
-        transition-all duration-200 hover:shadow-md`}
+      className={`p-4 transition-all duration-300 hover:shadow-md
+        ${parentId ? "border-l-4 border-primary/20 bg-primary/5 hover:border-primary/40" : ""} 
+        ${isReplyingTo ? "ring-2 ring-primary/50 bg-primary/5 scale-[1.02]" : ""} 
+        hover:scale-[1.01] group rounded-xl`}
     >
       <CommentHeader author={author} created_at={created_at} />
 
@@ -131,7 +132,9 @@ export const Comment = ({
         />
       ) : (
         <>
-          <p className="text-gray-700 mb-4 whitespace-pre-wrap">{content}</p>
+          <p className="text-gray-700 mb-4 whitespace-pre-wrap group-hover:text-gray-900 transition-colors duration-300">
+            {content}
+          </p>
           <CommentActions
             hasReacted={hasReacted}
             reactionCount={reactions?.length || 0}

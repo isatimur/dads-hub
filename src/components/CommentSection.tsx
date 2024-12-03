@@ -104,8 +104,8 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
   return (
     <div className="space-y-4 mt-6 animate-fade-in">
-      <div className="flex items-center gap-2 mb-4 group">
-        <MessageSquare className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300" />
+      <div className="flex items-center gap-2 mb-4 group hover:bg-primary/5 p-2 rounded-lg transition-all duration-300">
+        <MessageSquare className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300 animate-bounce-subtle" />
         <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
           {replyingTo ? "Write a Reply" : "Leave a Comment"}
         </h3>
@@ -125,16 +125,16 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
               setIsTyping(e.target.value.length > 0);
             }}
             className={`min-h-[100px] pr-12 transition-all duration-300 
-              ${isTyping ? 'ring-2 ring-primary/50 shadow-lg shadow-primary/10' : 'hover:border-primary/50'}
-              focus:ring-2 focus:ring-primary/50 focus:border-transparent
-              placeholder:text-muted-foreground/70 resize-none`}
+              ${isTyping ? 'ring-2 ring-primary/50 shadow-lg shadow-primary/10 scale-[1.01]' : 'hover:border-primary/50'}
+              focus:ring-2 focus:ring-primary/50 focus:border-transparent focus:scale-[1.01]
+              placeholder:text-muted-foreground/70 resize-none rounded-xl`}
           />
           <Button
             type="submit"
             size="icon"
             className={`absolute bottom-3 right-3 bg-primary hover:bg-primary/90 
-              transition-all duration-300 transform
-              ${isTyping ? 'scale-100 opacity-100 rotate-0' : 'scale-95 opacity-0 rotate-45'}
+              transition-all duration-300 transform rounded-full
+              ${isTyping ? 'scale-100 opacity-100 rotate-0 shadow-lg' : 'scale-95 opacity-0 rotate-45'}
               group-hover:scale-100 group-hover:opacity-100 group-hover:rotate-0`}
           >
             <Send className="w-4 h-4 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -146,7 +146,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
             variant="outline"
             onClick={() => setReplyingTo(null)}
             className="transition-all duration-300 hover:bg-destructive/10 hover:text-destructive 
-              hover:scale-105 active:scale-95 group"
+              hover:scale-105 active:scale-95 group rounded-xl shadow-sm"
           >
             Cancel Reply
             <span className="ml-1 transition-transform duration-300 group-hover:rotate-90">×</span>
@@ -158,8 +158,9 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
         {Object.values(threadedComments).map((thread: any) => (
           <div 
             key={thread.id} 
-            className="space-y-4 animate-fade-up hover:bg-primary/5 p-4 rounded-lg 
-              transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
+            className="space-y-4 animate-fade-up hover:bg-primary/5 p-4 rounded-xl 
+              transition-all duration-300 hover:shadow-lg hover:shadow-primary/5
+              hover:scale-[1.01] group"
           >
             <Comment
               {...thread}
@@ -169,7 +170,8 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
             />
             {thread.replies.length > 0 && (
               <div className="ml-8 space-y-4 border-l-2 border-primary/20 pl-4 
-                animate-fade-in hover:border-primary/40 transition-colors duration-300">
+                animate-fade-in hover:border-primary/40 transition-colors duration-300
+                group-hover:border-primary">
                 {thread.replies.map((reply: CommentType) => (
                   <Comment
                     key={reply.id}

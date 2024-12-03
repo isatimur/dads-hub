@@ -9,12 +9,15 @@ interface CommentHeaderProps {
 
 export const CommentHeader = ({ author, created_at }: CommentHeaderProps) => {
   return (
-    <div className="flex justify-between items-start mb-2">
+    <div className="flex justify-between items-start mb-2 group">
       <div className="flex items-center gap-2">
-        <MessageCircle className="w-4 h-4 text-primary" />
-        <span className="font-medium text-primary">{author?.username || "Anonymous"}</span>
+        <MessageCircle className="w-4 h-4 text-primary transition-transform 
+          duration-300 group-hover:scale-110 group-hover:rotate-12" />
+        <span className="font-medium text-primary transition-all duration-300 
+          group-hover:scale-105">{author?.username || "Anonymous"}</span>
       </div>
-      <span className="text-sm text-gray-500">
+      <span className="text-sm text-gray-500 transition-colors duration-300 
+        group-hover:text-gray-700">
         {new Date(created_at).toLocaleDateString()}
       </span>
     </div>

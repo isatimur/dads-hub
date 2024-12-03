@@ -68,10 +68,28 @@ export default {
             opacity: "1",
           },
         },
+        "bounce-subtle": {
+          "0%, 100%": {
+            transform: "translateY(-5%)",
+            animation: "timing-function: cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+            animation: "timing-function: cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
+        heartbeat: {
+          "0%": { transform: "scale(1)" },
+          "25%": { transform: "scale(1.2)" },
+          "50%": { transform: "scale(0.95)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.5s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
+        "bounce-subtle": "bounce-subtle 1s infinite",
+        heartbeat: "heartbeat 1s ease-in-out",
       },
     },
   },
