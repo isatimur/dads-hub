@@ -25,27 +25,30 @@ export const CommentActions = ({
       <Button
         variant="ghost"
         size="sm"
-        className={`group transition-all duration-300 hover:scale-105 
-          ${hasReacted ? "text-primary bg-primary/10" : "hover:text-primary hover:bg-primary/5"}`}
+        className={`group transition-all duration-300 hover:scale-105 active:scale-95
+          ${hasReacted ? "text-primary bg-primary/10 shadow-sm shadow-primary/10" : 
+            "hover:text-primary hover:bg-primary/5"}`}
         onClick={onReaction}
       >
         <Heart
           className={`w-4 h-4 mr-1 transition-all duration-300 
             ${hasReacted
-              ? "fill-current animate-scale-in"
+              ? "fill-current animate-[heartbeat_1s_ease-in-out]"
               : "group-hover:fill-primary/20 group-hover:scale-110"
             }`}
         />
-        <span className="font-medium">{reactionCount}</span>
+        <span className="font-medium transition-transform duration-300 
+          group-hover:scale-110">{reactionCount}</span>
       </Button>
       <Button
         variant="ghost"
         size="sm"
         onClick={onReply}
         className="group hover:bg-primary/10 text-primary font-medium 
-          transition-all duration-300 hover:scale-105"
+          transition-all duration-300 hover:scale-105 active:scale-95
+          hover:shadow-sm hover:shadow-primary/10"
       >
-        <Reply className="w-4 h-4 mr-1 transition-transform duration-300 
+        <Reply className="w-4 h-4 mr-1 transition-all duration-300 
           group-hover:-translate-y-0.5 group-hover:rotate-[-8deg]" />
         Reply
       </Button>
@@ -55,9 +58,10 @@ export const CommentActions = ({
             variant="ghost"
             size="sm"
             onClick={onEdit}
-            className="group hover:bg-primary/10 transition-all duration-300 hover:scale-105"
+            className="group hover:bg-primary/10 transition-all duration-300 
+              hover:scale-105 active:scale-95 hover:shadow-sm hover:shadow-primary/10"
           >
-            <Edit2 className="w-4 h-4 mr-1 transition-transform duration-300 
+            <Edit2 className="w-4 h-4 mr-1 transition-all duration-300 
               group-hover:rotate-12" />
             Edit
           </Button>
@@ -66,9 +70,10 @@ export const CommentActions = ({
             size="sm"
             onClick={onDelete}
             className="group hover:bg-destructive/10 text-destructive 
-              transition-all duration-300 hover:scale-105"
+              transition-all duration-300 hover:scale-105 active:scale-95
+              hover:shadow-sm hover:shadow-destructive/10"
           >
-            <Trash2 className="w-4 h-4 mr-1 transition-transform duration-300 
+            <Trash2 className="w-4 h-4 mr-1 transition-all duration-300 
               group-hover:rotate-12" />
             Delete
           </Button>
