@@ -1,60 +1,77 @@
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { 
+  Heart, 
+  Clock, 
+  Brain, 
+  Users, 
+  Baby, 
+  Sparkles, 
+  HeartPulse, 
+  Smartphone, 
+  Wallet 
+} from "lucide-react";
 
 const categories = [
   {
     id: "all",
-    label: "All",
-    icon: "📋",
-    description: "View all posts"
+    label: "All Posts",
+    icon: <Users className="w-5 h-5" />,
+    description: "View all community posts"
   },
   {
-    id: "difficult-conversations",
-    label: "Difficult Conversations",
-    icon: "💭",
-    description: "Guide for handling challenging topics"
+    id: "emotional-intelligence",
+    label: "Emotional Intelligence",
+    icon: <Heart className="w-5 h-5" />,
+    description: "Building emotional awareness and connection"
   },
   {
-    id: "emotional-support",
-    label: "Emotional Support",
-    icon: "❤️",
-    description: "Supporting emotional well-being"
+    id: "quality-time",
+    label: "Quality Time",
+    icon: <Clock className="w-5 h-5" />,
+    description: "Meaningful activities and bonding"
   },
   {
-    id: "behavioral-guidance",
-    label: "Behavioral Guidance",
-    icon: "🌟",
-    description: "Positive behavior strategies"
+    id: "personal-growth",
+    label: "Personal Growth",
+    icon: <Brain className="w-5 h-5" />,
+    description: "Developing yourself as a father"
   },
   {
-    id: "educational-development",
-    label: "Educational",
-    icon: "📚",
-    description: "Support learning journey"
+    id: "work-life-balance",
+    label: "Work-Life Balance",
+    icon: <Users className="w-5 h-5" />,
+    description: "Managing career and family"
   },
   {
-    id: "social-skills",
-    label: "Social Skills",
-    icon: "🤝",
-    description: "Develop healthy relationships"
+    id: "child-development",
+    label: "Child Development",
+    icon: <Baby className="w-5 h-5" />,
+    description: "Understanding developmental stages"
   },
   {
-    id: "mental-health",
-    label: "Mental Health",
-    icon: "🧠",
-    description: "Mental well-being support"
+    id: "family-traditions",
+    label: "Family Traditions",
+    icon: <Sparkles className="w-5 h-5" />,
+    description: "Creating lasting memories"
   },
   {
-    id: "crisis-management",
-    label: "Crisis Management",
-    icon: "🆘",
-    description: "Handle difficult situations"
+    id: "health-wellness",
+    label: "Health & Wellness",
+    icon: <HeartPulse className="w-5 h-5" />,
+    description: "Physical and mental health"
   },
   {
-    id: "age-specific-guidance",
-    label: "Age-Specific",
-    icon: "👶",
-    description: "Age-tailored advice"
+    id: "digital-parenting",
+    label: "Digital Parenting",
+    icon: <Smartphone className="w-5 h-5" />,
+    description: "Navigate technology use"
+  },
+  {
+    id: "financial-planning",
+    label: "Financial Planning",
+    icon: <Wallet className="w-5 h-5" />,
+    description: "Secure your family's future"
   }
 ];
 
@@ -78,13 +95,16 @@ export const CategoryList = ({ onCategoryChange }: CategoryListProps) => {
             key={id}
             variant={id === activeCategory ? "default" : "outline"}
             className={`
-              h-auto py-3 px-4 flex flex-col items-center text-center
+              h-auto py-4 px-4 flex flex-col items-center text-center gap-2
               transition-all duration-300 hover:scale-105 hover:shadow-md
               ${id === activeCategory ? 'ring-2 ring-primary/20' : ''}
+              group
             `}
             onClick={() => handleCategoryClick(id)}
           >
-            <span className="text-2xl mb-2">{icon}</span>
+            <span className="text-2xl mb-1 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+              {icon}
+            </span>
             <span className="font-medium mb-1">{label}</span>
             <span className="text-xs text-muted-foreground">{description}</span>
           </Button>
