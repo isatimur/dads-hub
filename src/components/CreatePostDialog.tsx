@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
@@ -34,9 +34,17 @@ const contentPrompts = {
   "financial-planning": "Share tips for securing your family's future..."
 };
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+}
+
 export const CreatePostDialog = () => {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
   const session = useSession();
   const queryClient = useQueryClient();
   
@@ -48,6 +56,25 @@ export const CreatePostDialog = () => {
       category_id: "",
     },
   });
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*');
+      
+      if (error) {
+        toast.error("Failed to load categories");
+        return;
+      }
+      
+      if (data) {
+        setCategories(data);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const onSubmit = async (values: FormValues) => {
     if (!session?.user?.id) {
@@ -78,7 +105,7 @@ export const CreatePostDialog = () => {
   };
 
   const handleCategoryChange = (categoryId: string) => {
-    setSelectedCategory(categoryId);
+    setSelectedCategory(categories.find(cat => cat.id === categoryId)?.slug || "");
     form.setValue("category_id", categoryId);
     
     // Reset content field with new placeholder
@@ -115,15 +142,11 @@ export const CreatePostDialog = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="emotional-intelligence">Emotional Intelligence</SelectItem>
-                      <SelectItem value="quality-time">Quality Time</SelectItem>
-                      <SelectItem value="personal-growth">Personal Growth</SelectItem>
-                      <SelectItem value="work-life-balance">Work-Life Balance</SelectItem>
-                      <SelectItem value="child-development">Child Development</SelectItem>
-                      <SelectItem value="family-traditions">Family Traditions</SelectItem>
-                      <SelectItem value="health-wellness">Health & Wellness</SelectItem>
-                      <SelectItem value="digital-parenting">Digital Parenting</SelectItem>
-                      <SelectItem value="financial-planning">Financial Planning</SelectItem>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
