@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { PenSquare } from "lucide-react";
+import { PenSquare, Lightbulb } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -22,8 +22,21 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+const contentPrompts = {
+  "emotional-intelligence": "Share your experience with helping your child process emotions...",
+  "quality-time": "Describe a meaningful activity that strengthened your bond...",
+  "personal-growth": "What's a parenting challenge that helped you grow...",
+  "work-life-balance": "How do you manage work responsibilities while staying present...",
+  "child-development": "Share insights about a developmental milestone...",
+  "family-traditions": "Describe a meaningful tradition you've started...",
+  "health-wellness": "What strategies help you maintain family health...",
+  "digital-parenting": "How do you approach screen time and technology...",
+  "financial-planning": "Share tips for securing your family's future..."
+};
+
 export const CreatePostDialog = () => {
   const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const session = useSession();
   const queryClient = useQueryClient();
   
@@ -64,20 +77,59 @@ export const CreatePostDialog = () => {
     }
   };
 
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    form.setValue("category_id", categoryId);
+    
+    // Reset content field with new placeholder
+    form.setValue("content", "");
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="hidden md:flex items-center space-x-2">
           <PenSquare className="w-4 h-4" />
-          <span>Create Post</span>
+          <span>Share Your Experience</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create a New Post</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-primary" />
+            Share Your Parenting Journey
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="category_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select onValueChange={(value) => handleCategoryChange(value)} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="emotional-intelligence">Emotional Intelligence</SelectItem>
+                      <SelectItem value="quality-time">Quality Time</SelectItem>
+                      <SelectItem value="personal-growth">Personal Growth</SelectItem>
+                      <SelectItem value="work-life-balance">Work-Life Balance</SelectItem>
+                      <SelectItem value="child-development">Child Development</SelectItem>
+                      <SelectItem value="family-traditions">Family Traditions</SelectItem>
+                      <SelectItem value="health-wellness">Health & Wellness</SelectItem>
+                      <SelectItem value="digital-parenting">Digital Parenting</SelectItem>
+                      <SelectItem value="financial-planning">Financial Planning</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="title"
@@ -85,7 +137,10 @@ export const CreatePostDialog = () => {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter post title" {...field} />
+                    <Input 
+                      placeholder="Give your post a clear, engaging title" 
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,42 +151,19 @@ export const CreatePostDialog = () => {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Content</FormLabel>
+                  <FormLabel>Share Your Story</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Write your post content..." {...field} />
+                    <Textarea 
+                      placeholder={contentPrompts[selectedCategory as keyof typeof contentPrompts] || "Share your experience..."} 
+                      className="min-h-[150px]"
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="category_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="newborns">Newborns</SelectItem>
-                      <SelectItem value="toddlers">Toddlers</SelectItem>
-                      <SelectItem value="school-age">School Age</SelectItem>
-                      <SelectItem value="teenagers">Teenagers</SelectItem>
-                      <SelectItem value="communication">Communication</SelectItem>
-                      <SelectItem value="self-care">Self Care</SelectItem>
-                      <SelectItem value="co-parenting">Co-Parenting</SelectItem>
-                      <SelectItem value="activities">Activities</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full">Create Post</Button>
+            <Button type="submit" className="w-full">Share with Community</Button>
           </form>
         </Form>
       </DialogContent>
