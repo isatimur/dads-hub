@@ -28,10 +28,10 @@ const Index = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <Navbar />
         <main className="container mx-auto px-4 pt-24">
-          <div className="text-center text-red-500">
+          <div className="text-center text-red-500 animate-fade-in">
             Error loading posts. Please try again later.
           </div>
         </main>
@@ -42,14 +42,16 @@ const Index = () => {
   const sortedPosts = posts ? sortPosts(posts, sortBy) : [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <Navbar />
       <main className="container mx-auto px-4 pt-24 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6 animate-fade-up">
             <ForumHeader />
-            <SortControls sortBy={sortBy} onSortChange={setSortBy} />
-            <CategoryList onCategoryChange={setSelectedCategory} />
+            <div className="bg-white/50 backdrop-blur-sm rounded-lg border border-primary/10 p-4 shadow-sm">
+              <SortControls sortBy={sortBy} onSortChange={setSortBy} />
+              <CategoryList onCategoryChange={setSelectedCategory} />
+            </div>
             {isLoading ? (
               <div className="flex justify-center items-center h-48">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -58,8 +60,10 @@ const Index = () => {
               <PostList posts={sortedPosts} isLoading={isLoading} />
             )}
           </div>
-          <div className="hidden lg:block">
-            <RulesSidebar />
+          <div className="hidden lg:block animate-fade-in">
+            <div className="sticky top-24">
+              <RulesSidebar />
+            </div>
           </div>
         </div>
       </main>

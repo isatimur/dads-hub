@@ -110,63 +110,68 @@ export const PostCard = ({
   ));
 
   return (
-    <Card className="w-full mb-4 overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-up">
+    <Card className="w-full mb-6 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up bg-white/50 backdrop-blur-sm border-primary/10">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200">
             {category}
           </span>
           <span className="text-sm text-gray-500">{timeAgo}</span>
         </div>
         
-        <h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
-        <div className="prose prose-sm max-w-none text-gray-600 mb-4">
+        <h3 className="text-xl font-semibold mb-3 text-gray-900 hover:text-primary transition-colors duration-200">
+          {title}
+        </h3>
+        <div className="prose prose-sm max-w-none text-gray-600 mb-4 leading-relaxed">
           {formattedContent}
         </div>
         
         <div className="flex items-center justify-between border-t pt-4 mt-4">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`space-x-2 ${hasVoted ? 'text-primary' : ''}`}
+              className={`space-x-2 group ${hasVoted ? 'text-primary' : ''}`}
               onClick={handleVote}
             >
-              <Heart className={`w-4 h-4 ${hasVoted ? 'fill-current' : ''}`} />
+              <Heart className={`w-4 h-4 transition-transform duration-200 group-hover:scale-110 ${hasVoted ? 'fill-current animate-heartbeat' : ''}`} />
               <span>{votes}</span>
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
-              className="space-x-2"
+              className="space-x-2 group"
               onClick={handleComment}
             >
-              <MessageSquare className="w-4 h-4" />
+              <MessageSquare className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
               <span>{comments?.length || 0}</span>
             </Button>
             <Button 
               variant="ghost" 
               size="sm"
+              className="group"
               onClick={handleShare}
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleSave}
-              className={isSaved ? 'text-primary' : ''}
+              className={`group ${isSaved ? 'text-primary' : ''}`}
             >
-              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+              <Bookmark className={`w-4 h-4 transition-transform duration-200 group-hover:scale-110 ${isSaved ? 'fill-current' : ''}`} />
             </Button>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
             Posted by <span className="font-medium text-gray-900">{author}</span>
           </div>
         </div>
 
         {showComments && (
-          <CommentSection postId={id} comments={comments} />
+          <div className="mt-6 animate-fade-in">
+            <CommentSection postId={id} comments={comments} />
+          </div>
         )}
       </div>
     </Card>
