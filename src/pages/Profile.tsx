@@ -29,6 +29,7 @@ const Profile = () => {
 
     const getProfile = async () => {
       try {
+        setLoading(true);
         const { data, error } = await supabase
           .from("profiles")
           .select("username, bio, avatar_url")
@@ -43,6 +44,7 @@ const Profile = () => {
           setAvatarUrl(data.avatar_url || "");
         }
       } catch (error) {
+        console.error("Profile fetch error:", error);
         toast.error("Error loading profile");
       } finally {
         setLoading(false);
@@ -55,8 +57,8 @@ const Profile = () => {
   const updateProfile = async () => {
     if (!session) return;
     
-    setUpdating(true);
     try {
+      setUpdating(true);
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -69,11 +71,14 @@ const Profile = () => {
       if (error) throw error;
       toast.success("Profile updated successfully");
     } catch (error) {
+      console.error("Profile update error:", error);
       toast.error("Error updating profile");
     } finally {
       setUpdating(false);
     }
   };
+
+  if (!session) return null;
 
   if (loading) {
     return (

@@ -27,21 +27,28 @@ export const UserMenu = () => {
         .eq("id", session?.user?.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Profile fetch error:", error);
+        throw error;
+      }
       return data;
     },
     enabled: !!session?.user?.id,
   });
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error signing out");
-    } else {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
       toast.success("Signed out successfully");
       navigate("/auth");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Error signing out");
     }
   };
+
+  if (!session) return null;
 
   return (
     <DropdownMenu>

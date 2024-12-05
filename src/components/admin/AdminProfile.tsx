@@ -5,12 +5,13 @@ import { StatsCard } from "./StatsCard";
 import { BadgesList } from "./BadgesList";
 import { RolesList } from "./RolesList";
 import { QuestsList } from "./QuestsList";
+import { toast } from "sonner";
 
 export const AdminProfile = () => {
   const session = useSession();
   const supabase = useSupabaseClient();
 
-  const { data: profile, isLoading: loadingProfile } = useQuery({
+  const { data: profile, isLoading: loadingProfile, error: profileError } = useQuery({
     queryKey: ["profile", session?.user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -19,13 +20,16 @@ export const AdminProfile = () => {
         .eq("id", session?.user?.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Profile fetch error:", error);
+        throw error;
+      }
       return data;
     },
     enabled: !!session?.user?.id,
   });
 
-  const { data: quests, isLoading: loadingQuests } = useQuery({
+  const { data: quests, isLoading: loadingQuests, error: questsError } = useQuery({
     queryKey: ["quests", session?.user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -39,11 +43,23 @@ export const AdminProfile = () => {
         `)
         .eq("user_quests.user_id", session?.user?.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Quests fetch error:", error);
+        throw error;
+      }
       return data;
     },
     enabled: !!session?.user?.id,
   });
+
+  if (profileError || questsError) {
+    toast.error("Failed to load profile data");
+    return (
+      <div className="p-4 text-red-500">
+        Error loading profile data. Please try again later.
+      </div>
+    );
+  }
 
   if (loadingProfile || loadingQuests) {
     return <ProfileSkeleton />;
