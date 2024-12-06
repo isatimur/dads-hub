@@ -71,7 +71,7 @@ export const NotificationsMenu = () => {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="w-80 bg-background border-border shadow-lg">
         <DropdownMenuLabel>Notifications</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
@@ -82,7 +82,7 @@ export const NotificationsMenu = () => {
           notifications.map((notification: any) => (
             <DropdownMenuItem
               key={notification.id}
-              className="p-4 cursor-pointer"
+              className="p-4 cursor-pointer hover:bg-muted"
               onClick={() => markAsRead(notification.id)}
             >
               <div className="flex flex-col gap-1">
