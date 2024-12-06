@@ -19,41 +19,54 @@ export const NotificationsMenu = () => {
   const { data: notifications = [], refetch: refetchNotifications } = useQuery({
     queryKey: ["notifications"],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
+      console.log("Fetching notifications for user:", session.user.id);
+      
       const { data, error } = await supabase
         .from("notifications")
         .select(`
           *,
-          sender:profiles!notifications_sender_id_fkey(username),
+          sender:profiles(username),
           post:posts(title)
         `)
+        .eq("recipient_id", session.user.id)
         .eq("read", false)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Notifications fetch error:", error);
+        throw error;
+      }
+      
+      console.log("Fetched notifications:", data);
       return data || [];
     },
-    enabled: !!session,
+    enabled: !!session?.user?.id,
   });
 
   const markAsRead = async (notificationId: string) => {
-    const { error } = await supabase
-      .from("notifications")
-      .update({ read: true })
-      .eq("id", notificationId);
+    try {
+      const { error } = await supabase
+        .from("notifications")
+        .update({ read: true })
+        .eq("id", notificationId)
+        .eq("recipient_id", session?.user?.id);
 
-    if (error) {
-      toast.error("Failed to mark notification as read");
-    } else {
+      if (error) throw error;
       refetchNotifications();
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+      toast.error("Failed to mark notification as read");
     }
   };
 
   const getNotificationContent = (notification: any) => {
     switch (notification.type) {
       case "comment":
-        return `${notification.sender.username} commented on your post "${notification.post.title}"`;
+        return `${notification.sender?.username || 'Someone'} commented on your post "${notification.post?.title || 'a post'}"`;
       case "mention":
-        return `${notification.sender.username} mentioned you in a comment`;
+        return `${notification.sender?.username || 'Someone'} mentioned you in a comment`;
       default:
         return notification.content;
     }

@@ -21,9 +21,11 @@ export const UserMenu = () => {
   const { data: profile } = useQuery({
     queryKey: ["profile", session?.user?.id],
     queryFn: async () => {
+      console.log("Fetching profile for user:", session?.user?.id);
+      
       const { data, error } = await supabase
         .from("profiles")
-        .select("points")
+        .select("username, points")
         .eq("id", session?.user?.id)
         .single();
 
@@ -31,6 +33,8 @@ export const UserMenu = () => {
         console.error("Profile fetch error:", error);
         throw error;
       }
+      
+      console.log("Fetched profile:", data);
       return data;
     },
     enabled: !!session?.user?.id,
@@ -57,7 +61,7 @@ export const UserMenu = () => {
           <User className="w-5 h-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="w-56 bg-background border-border shadow-lg">
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>My Account</span>
           <span className="text-sm font-normal text-muted-foreground">
