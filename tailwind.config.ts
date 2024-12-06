@@ -25,28 +25,28 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9b87f5",
+          DEFAULT: "#546E7A", // Professional blue-gray
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#7E69AB",
+          DEFAULT: "#78909C", // Lighter blue-gray
           foreground: "#ffffff",
         },
         destructive: {
-          DEFAULT: "#ef4444",
+          DEFAULT: "#C62828", // Mature red
           foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "#f3f4f6",
-          foreground: "#6b7280",
+          DEFAULT: "#ECEFF1", // Light blue-gray
+          foreground: "#546E7A",
         },
         accent: {
-          DEFAULT: "#D6BCFA",
-          foreground: "#1A1F2C",
+          DEFAULT: "#90A4AE", // Medium blue-gray
+          foreground: "#263238",
         },
         card: {
           DEFAULT: "#ffffff",
-          foreground: "#1A1F2C",
+          foreground: "#263238",
         },
       },
       keyframes: {
@@ -96,6 +96,36 @@ export default {
         "bounce-subtle": "bounce-subtle 1s infinite",
         heartbeat: "heartbeat 1s ease-in-out",
         shimmer: "shimmer 2s infinite",
+      },
+      boxShadow: {
+        'dad': '0 2px 4px rgba(38, 50, 56, 0.1)',
+        'dad-hover': '0 4px 8px rgba(38, 50, 56, 0.15)',
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: '65ch',
+            color: '#263238',
+            h1: {
+              color: '#263238',
+            },
+            h2: {
+              color: '#37474F',
+            },
+            h3: {
+              color: '#455A64',
+            },
+            strong: {
+              color: '#455A64',
+            },
+            a: {
+              color: '#546E7A',
+              '&:hover': {
+                color: '#37474F',
+              },
+            },
+          },
+        },
       },
     },
   },
