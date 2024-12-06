@@ -32,6 +32,7 @@ export const PostCard = ({
   const [hasVoted, setHasVoted] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [showComments, setShowComments] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const session = useSession();
 
   useEffect(() => {
@@ -105,12 +106,16 @@ export const PostCard = ({
     setShowComments(!showComments);
   };
 
-  const formattedContent = content.split('\n').map((line, i) => (
+  const truncatedContent = content.length > 300 && !isExpanded
+    ? content.slice(0, 300) + "..."
+    : content;
+
+  const formattedContent = truncatedContent.split('\n').map((line, i) => (
     <p key={i} className="mb-2">{line}</p>
   ));
 
   return (
-    <Card className="w-full mb-6 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-up bg-white/50 backdrop-blur-sm border-primary/10">
+    <Card className="w-full mb-6 overflow-hidden hover:shadow-dad-hover transition-all duration-300 animate-fade-up bg-white/50 backdrop-blur-sm border-primary/10 shadow-dad">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200">
@@ -119,11 +124,22 @@ export const PostCard = ({
           <span className="text-sm text-gray-500">{timeAgo}</span>
         </div>
         
-        <h3 className="text-xl font-semibold mb-3 text-gray-900 hover:text-primary transition-colors duration-200">
+        <h3 className="text-xl font-semibold mb-3 text-gray-900 hover:text-primary transition-colors duration-200 line-clamp-2">
           {title}
         </h3>
-        <div className="prose prose-sm max-w-none text-gray-600 mb-4 leading-relaxed">
+        
+        <div className="prose prose-sm max-w-none text-gray-600 mb-4 leading-relaxed overflow-hidden">
           {formattedContent}
+          {content.length > 300 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="mt-2 text-primary hover:text-primary/80"
+            >
+              {isExpanded ? "Show less" : "Read more"}
+            </Button>
+          )}
         </div>
         
         <div className="flex items-center justify-between border-t pt-4 mt-4">
