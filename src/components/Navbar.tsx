@@ -5,9 +5,12 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { CreatePostDialog } from "./CreatePostDialog";
 import { NotificationsMenu } from "./navbar/NotificationsMenu";
 import { UserMenu } from "./navbar/UserMenu";
+import { useOrganization } from "@/contexts/OrganizationContext";
+import { Skeleton } from "./ui/skeleton";
 
 export const Navbar = () => {
   const session = useSession();
+  const { currentOrganization, isLoading } = useOrganization();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
@@ -15,9 +18,20 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2 group">
             <Users className="w-8 h-8 text-primary transition-colors duration-200 group-hover:text-secondary" />
-            <span className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-200">
-              DadSpace
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-200">
+                DadSpace
+              </span>
+              {session && (
+                isLoading ? (
+                  <Skeleton className="h-4 w-24" />
+                ) : (
+                  <span className="text-sm text-muted-foreground">
+                    {currentOrganization?.name}
+                  </span>
+                )
+              )}
+            </div>
           </Link>
           
           <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
