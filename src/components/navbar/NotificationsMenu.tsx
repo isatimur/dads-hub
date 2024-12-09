@@ -17,7 +17,7 @@ export const NotificationsMenu = () => {
   const supabase = useSupabaseClient();
 
   const { data: notifications = [], refetch: refetchNotifications } = useQuery({
-    queryKey: ["notifications"],
+    queryKey: ["notifications", session?.user?.id],
     queryFn: async () => {
       if (!session?.user?.id) return [];
       
@@ -27,7 +27,7 @@ export const NotificationsMenu = () => {
         .from("notifications")
         .select(`
           *,
-          sender:profiles(username),
+          sender:profiles!notifications_sender_id_fkey(username),
           post:posts(title)
         `)
         .eq("recipient_id", session.user.id)

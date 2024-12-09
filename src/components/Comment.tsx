@@ -97,19 +97,28 @@ export const Comment = ({
       } else {
         const { error } = await supabase
           .from("comment_reactions")
-          .insert({
+          .upsert({
             comment_id: id,
             user_id: session.user.id,
             type: "LIKE",
+          }, {
+            onConflict: 'comment_id,user_id,type'
           });
 
-        if (error) throw error;
+        if (error) {
+          if (error.code === '23505') {
+            // Duplicate reaction, ignore
+            return;
+          }
+          throw error;
+        }
         setHasReacted(true);
       }
 
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success(hasReacted ? "Reaction removed" : "Reaction added!");
     } catch (error) {
+      console.error("Reaction error:", error);
       toast.error("Failed to update reaction");
     }
   };
