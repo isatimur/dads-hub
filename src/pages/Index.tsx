@@ -28,10 +28,10 @@ const Index = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
         <Navbar />
         <main className="container mx-auto px-4 pt-24">
-          <div className="text-center text-red-500 animate-fade-in">
+          <div className="text-center text-red-500 animate-fade-in glass-panel p-6">
             Error loading posts. Please try again later.
           </div>
         </main>
@@ -42,18 +42,18 @@ const Index = () => {
   const sortedPosts = posts ? sortPosts(posts, sortBy) : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
       <Navbar />
       <main className="container mx-auto px-4 pt-24 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-2 space-y-6 animate-fade-up">
             <ForumHeader />
-            <div className="bg-white/50 backdrop-blur-sm rounded-lg border border-primary/10 p-4 shadow-sm">
+            <div className="glass-panel p-6">
               <SortControls sortBy={sortBy} onSortChange={setSortBy} />
               <CategoryList onCategoryChange={setSelectedCategory} />
             </div>
             {isLoading ? (
-              <div className="flex justify-center items-center h-48">
+              <div className="flex justify-center items-center h-48 glass-panel">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
             ) : (

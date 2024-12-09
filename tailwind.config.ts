@@ -25,34 +25,34 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#37474F", // Deeper blue-gray for trust
+          DEFAULT: "#8B5CF6",
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#607D8B", // Professional blue-gray
+          DEFAULT: "#7E69AB",
           foreground: "#ffffff",
         },
         destructive: {
-          DEFAULT: "#B71C1C", // Mature dark red
+          DEFAULT: "#B71C1C",
           foreground: "#ffffff",
         },
         muted: {
-          DEFAULT: "#F5F7F9", // Softer background
-          foreground: "#37474F",
+          DEFAULT: "#F5F7F9",
+          foreground: "#6B7280",
         },
         accent: {
-          DEFAULT: "#455A64", // Rich blue-gray
-          foreground: "#ffffff",
+          DEFAULT: "#D6BCFA",
+          foreground: "#1A1F2C",
         },
         card: {
           DEFAULT: "#ffffff",
-          foreground: "#263238",
+          foreground: "#1A1F2C",
         },
       },
       boxShadow: {
-        'dad': '0 2px 8px rgba(55, 71, 79, 0.08)',
-        'dad-hover': '0 4px 12px rgba(55, 71, 79, 0.12)',
-        'dad-active': '0 1px 4px rgba(55, 71, 79, 0.1)',
+        'glass': '0 4px 24px -1px rgba(0, 0, 0, 0.05)',
+        'glass-hover': '0 8px 32px -1px rgba(0, 0, 0, 0.1)',
+        'glass-border': 'inset 0 0 0 1px rgba(255, 255, 255, 0.15)',
       },
       keyframes: {
         "fade-up": {
@@ -100,34 +100,34 @@ export default {
         DEFAULT: {
           css: {
             maxWidth: '65ch',
-            color: '#263238',
+            color: '#1A1F2C',
             h1: {
-              color: '#263238',
+              color: '#1A1F2C',
               fontWeight: '700',
             },
             h2: {
-              color: '#37474F',
+              color: '#8B5CF6',
               fontWeight: '600',
             },
             h3: {
-              color: '#455A64',
+              color: '#7E69AB',
               fontWeight: '600',
             },
             strong: {
-              color: '#455A64',
+              color: '#7E69AB',
               fontWeight: '600',
             },
             a: {
-              color: '#546E7A',
+              color: '#8B5CF6',
               '&:hover': {
-                color: '#37474F',
+                color: '#7E69AB',
               },
             },
           },
         },
       },
       borderRadius: {
-        'dad': '0.75rem',
+        'glass': '1rem',
       },
     },
   },
