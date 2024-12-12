@@ -3,19 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { CategoryList } from "@/components/CategoryList";
 import { RulesSidebar } from "@/components/RulesSidebar";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { usePosts } from "@/hooks/usePosts";
 import { ForumHeader } from "@/components/forum/ForumHeader";
 import { SortControls } from "@/components/forum/SortControls";
 import { PostList } from "@/components/forum/PostList";
 import { sortPosts, SortOption } from "@/utils/postSorting";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState<SortOption>("hot");
   const session = useSession();
   const navigate = useNavigate();
+  const supabase = useSupabaseClient();
   const { data: posts, isLoading, error } = usePosts(selectedCategory);
 
   useEffect(() => {
@@ -23,6 +26,29 @@ const Index = () => {
       navigate("/auth");
     }
   }, [session, navigate]);
+
+  const handleSubscribe = async () => {
+    try {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        headers: {
+          Authorization: `Bearer ${currentSession?.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      toast.error('Failed to start checkout process');
+    }
+  };
 
   if (!session) return null;
 
@@ -49,7 +75,15 @@ const Index = () => {
           <div className="lg:col-span-2 space-y-6 animate-fade-up">
             <ForumHeader />
             <div className="glass-panel p-6">
-              <SortControls sortBy={sortBy} onSortChange={setSortBy} />
+              <div className="flex justify-between items-center mb-4">
+                <SortControls sortBy={sortBy} onSortChange={setSortBy} />
+                <Button 
+                  onClick={handleSubscribe}
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90"
+                >
+                  Upgrade to Pro
+                </Button>
+              </div>
               <CategoryList onCategoryChange={setSelectedCategory} />
             </div>
             {isLoading ? (
