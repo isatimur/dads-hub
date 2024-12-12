@@ -10,6 +10,9 @@ import { SortControls } from "@/components/forum/SortControls";
 import { PostList } from "@/components/forum/PostList";
 import { sortPosts, SortOption } from "@/utils/postSorting";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { sendEmail } from "@/utils/email";
+import { toast } from "sonner";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -23,6 +26,20 @@ const Index = () => {
       navigate("/auth");
     }
   }, [session, navigate]);
+
+  const handleTestEmail = async () => {
+    try {
+      await sendEmail({
+        to: [session?.user?.email || ""],
+        subject: "Test Email from DadSpace",
+        html: "<h1>Hello from DadSpace!</h1><p>This is a test email to verify the Resend integration is working correctly.</p>",
+      });
+      toast.success("Test email sent successfully!");
+    } catch (error) {
+      console.error("Error sending test email:", error);
+      toast.error("Failed to send test email. Check console for details.");
+    }
+  };
 
   if (!session) return null;
 
@@ -49,7 +66,16 @@ const Index = () => {
           <div className="lg:col-span-2 space-y-6 animate-fade-up">
             <ForumHeader />
             <div className="glass-panel p-6">
-              <SortControls sortBy={sortBy} onSortChange={setSortBy} />
+              <div className="flex justify-between items-center mb-4">
+                <SortControls sortBy={sortBy} onSortChange={setSortBy} />
+                <Button 
+                  onClick={handleTestEmail}
+                  variant="outline"
+                  className="glass-button"
+                >
+                  Test Email Integration
+                </Button>
+              </div>
               <CategoryList onCategoryChange={setSelectedCategory} />
             </div>
             {isLoading ? (
