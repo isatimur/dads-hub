@@ -31,18 +31,28 @@ const Index = () => {
     try {
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       
+      if (!currentSession) {
+        toast.error('Please sign in to upgrade');
+        navigate('/auth');
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         headers: {
           Authorization: `Bearer ${currentSession?.access_token}`,
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating checkout session:', error);
+        toast.error('Failed to start checkout process');
+        return;
+      }
 
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        throw new Error('No checkout URL received');
+        toast.error('No checkout URL received');
       }
     } catch (error) {
       console.error('Error creating checkout session:', error);
