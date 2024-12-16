@@ -8,7 +8,7 @@ import { ForumHeader } from "@/components/forum/ForumHeader";
 import { SortControls } from "@/components/forum/SortControls";
 import { PostList } from "@/components/forum/PostList";
 import { sortPosts, SortOption } from "@/utils/postSorting";
-import { Loader2, ArrowRight, Users2, Shield, MessageSquare } from "lucide-react";
+import { Loader2, ArrowRight, Users2, Shield, MessageSquare, Heart, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MainLayout } from "@/components/layout/MainLayout";
@@ -55,51 +55,80 @@ const Index = () => {
   };
 
   const renderLandingSection = () => (
-    <section className="py-20 text-center">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <h1 className="text-5xl font-bold text-gray-900 mb-6 animate-fade-up">
-          Welcome to DadSpace
-        </h1>
-        <p className="text-xl text-gray-600 mb-8 animate-fade-up delay-100">
-          A supportive community for conscious fathers to connect, share, and grow together.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <section className="min-h-screen flex flex-col justify-center py-20 overflow-hidden">
+      <div className="max-w-4xl mx-auto px-4 space-y-12">
+        <div className="text-center space-y-6">
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-fade-up">
+            Welcome to DadSpace
+          </h1>
+          <p className="text-2xl text-gray-600 max-w-2xl mx-auto animate-fade-up delay-100">
+            Join a supportive community of conscious fathers on their journey of growth and connection.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
           {[
             {
-              icon: <Users2 className="w-8 h-8 text-primary" />,
+              icon: <Users2 className="w-10 h-10 text-primary" />,
               title: "Community",
-              description: "Connect with like-minded fathers"
+              description: "Connect with like-minded fathers in a supportive environment",
+              delay: "delay-[200ms]"
             },
             {
-              icon: <Shield className="w-8 h-8 text-primary" />,
-              title: "Safe Space",
-              description: "Share experiences in a supportive environment"
+              icon: <Heart className="w-10 h-10 text-primary" />,
+              title: "Support",
+              description: "Share experiences and get advice from fellow dads",
+              delay: "delay-[300ms]"
             },
             {
-              icon: <MessageSquare className="w-8 h-8 text-primary" />,
-              title: "Discussions",
-              description: "Engage in meaningful conversations"
+              icon: <Star className="w-10 h-10 text-primary" />,
+              title: "Growth",
+              description: "Learn and develop as a parent through shared wisdom",
+              delay: "delay-[400ms]"
             }
           ].map((feature, index) => (
             <div 
               key={index}
-              className="p-6 glass-card hover:scale-105 transition-transform duration-300 animate-fade-up"
-              style={{ animationDelay: `${(index + 2) * 100}ms` }}
+              className={`glass-card p-8 text-center group hover:scale-105 transition-all duration-500 animate-fade-up ${feature.delay}`}
             >
-              <div className="flex justify-center mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <div className="flex justify-center mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-gray-900">{feature.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
-        <Button 
-          onClick={() => navigate(session ? "/" : "/auth")}
-          size="lg"
-          className="animate-fade-up delay-500 group"
-        >
-          Get Started
-          <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </Button>
+
+        <div className="flex flex-col items-center space-y-8 animate-fade-up delay-500">
+          <Button 
+            onClick={() => navigate(session ? "/" : "/auth")}
+            size="lg"
+            className="group bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300"
+          >
+            Join Our Community
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+          
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <Shield className="w-4 h-4" />
+            <span>Safe and supportive environment</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 animate-fade-up delay-600">
+          {[
+            { label: "Active Members", value: "1,000+" },
+            { label: "Daily Discussions", value: "50+" },
+            { label: "Success Stories", value: "500+" },
+            { label: "Years of Wisdom", value: "10+" }
+          ].map((stat, index) => (
+            <div key={index} className="glass-card p-6 text-center hover:scale-105 transition-all duration-300">
+              <div className="text-2xl font-bold text-primary mb-2">{stat.value}</div>
+              <div className="text-gray-600">{stat.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -127,7 +156,7 @@ const Index = () => {
                 <SortControls sortBy={sortBy} onSortChange={setSortBy} />
                 <Button 
                   onClick={handleSubscribe}
-                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90"
+                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all duration-300"
                 >
                   Upgrade to Pro
                 </Button>
