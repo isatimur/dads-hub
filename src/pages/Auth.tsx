@@ -1,49 +1,42 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useEffect } from "react";
+import { MainLayout } from "@/components/layout/MainLayout";
 
 const AuthPage = () => {
+  const session = useSession();
+  const supabase = useSupabaseClient();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        navigate("/");
-      } else if (event === "USER_UPDATED") {
-        // Handle email confirmation
-        if (session?.user.email_confirmed_at) {
-          toast.success("Email confirmed successfully!");
-          navigate("/");
-        }
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (session) {
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome to DadSpace</h2>
-          <p className="mt-2 text-gray-600">Join our community of conscious fathers</p>
-          <p className="mt-2 text-sm text-gray-500">You will need to confirm your email address after signing up</p>
-        </div>
+    <MainLayout>
+      <div className="max-w-md mx-auto glass-panel p-8 animate-fade-up">
+        <h1 className="text-2xl font-bold text-center mb-6">Welcome to DadSpace</h1>
         <Auth
           supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          providers={[]}
-          theme="light"
-          redirectTo={`${window.location.origin}/auth/callback`}
-          magicLink={false}
-          showLinks={true}
-          onlyThirdPartyProviders={false}
+          appearance={{
+            theme: ThemeSupa,
+            variables: {
+              default: {
+                colors: {
+                  brand: '#8B5CF6',
+                  brandAccent: '#7E69AB',
+                },
+              },
+            },
+          }}
+          providers={["google", "github"]}
         />
       </div>
-    </div>
+    </MainLayout>
   );
 };
 
