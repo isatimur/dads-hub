@@ -1,6 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { User, Settings, LogOut } from "lucide-react";
+import { useSession } from "@supabase/auth-helpers-react";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,78 +8,62 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut, Settings, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 
 export const UserMenu = () => {
   const session = useSession();
-  const supabase = useSupabaseClient();
-  const navigate = useNavigate();
 
-  const { data: profile } = useQuery({
-    queryKey: ["profile", session?.user?.id],
-    queryFn: async () => {
-      console.log("Fetching profile for user:", session?.user?.id);
-      
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("username, points")
-        .eq("id", session?.user?.id)
-        .single();
+  if (!session?.user) return null;
 
-      if (error) {
-        console.error("Profile fetch error:", error);
-        throw error;
-      }
-      
-      console.log("Fetched profile:", data);
-      return data;
-    },
-    enabled: !!session?.user?.id,
-  });
-
-  const handleLogout = async () => {
+  const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await supabase.auth.signOut();
       toast.success("Signed out successfully");
-      navigate("/auth");
     } catch (error) {
-      console.error("Logout error:", error);
       toast.error("Error signing out");
     }
   };
 
-  if (!session) return null;
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="hover:bg-gray-100">
-          <User className="w-5 h-5" />
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={session.user.user_metadata.avatar_url} alt={session.user.email || ""} />
+            <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 bg-background border-border shadow-lg">
-        <DropdownMenuLabel className="flex items-center justify-between">
-          <span>My Account</span>
-          <span className="text-sm font-normal text-muted-foreground">
-            {profile?.points || 0} points
-          </span>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{session.user.email}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {session.user.user_metadata.username || session.user.email}
+            </p>
+          </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={() => navigate("/profile")}>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+        <DropdownMenuItem asChild>
+          <Link to="/profile" className="cursor-pointer">
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+        <DropdownMenuItem asChild>
+          <Link to="/settings" className="cursor-pointer">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          className="cursor-pointer text-red-600"
-          onClick={handleLogout}
+        <DropdownMenuItem
+          className="cursor-pointer text-red-600 focus:text-red-600"
+          onClick={handleSignOut}
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
