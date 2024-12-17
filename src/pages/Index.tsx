@@ -12,6 +12,7 @@ import { Loader2, ArrowRight, Users2, Shield, MessageSquare, Heart, Star } from 
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { ProUpgradeButton } from "@/components/subscription/ProUpgradeButton";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -101,14 +102,7 @@ const Index = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-8 animate-fade-up delay-500">
-          <Button 
-            onClick={() => navigate(session ? "/" : "/auth")}
-            size="lg"
-            className="group bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all duration-300"
-          >
-            Join Our Community
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <ProUpgradeButton />
           
           <div className="flex items-center space-x-4 text-sm text-gray-500">
             <Shield className="w-4 h-4" />
@@ -154,12 +148,7 @@ const Index = () => {
             <div className="glass-panel p-6">
               <div className="flex justify-between items-center mb-4">
                 <SortControls sortBy={sortBy} onSortChange={setSortBy} />
-                <Button 
-                  onClick={handleSubscribe}
-                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all duration-300"
-                >
-                  Upgrade to Pro
-                </Button>
+                <ProUpgradeButton />
               </div>
               <CategoryList onCategoryChange={setSelectedCategory} />
             </div>
