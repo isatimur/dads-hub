@@ -12,7 +12,10 @@ interface PostCardProps {
   id: string;
   title: string;
   content: string;
-  author: string;
+  author: {
+    id: string;
+    username: string;
+  };
   category: string;
   votes: number;
   comments: any[];
@@ -181,14 +184,14 @@ export const PostCard = ({
             </Button>
           </div>
           <div className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
-            Posted by <span className="font-medium text-gray-900">{author}</span>
+            Posted by <span className="font-medium text-gray-900">{author.username}</span>
           </div>
         </div>
 
         <ContentModeration
           contentId={id}
           contentType="post"
-          authorId={author?.id}
+          authorId={author.id}
         />
 
         {showComments && (

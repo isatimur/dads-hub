@@ -37,7 +37,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .from("content_moderation")
         .select("*")
         .eq("content_id", contentId)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== "PGRST116") throw error;
       return data;
