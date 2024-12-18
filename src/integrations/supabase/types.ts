@@ -306,8 +306,13 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          children: Json | null
           created_at: string
+          display_name: string | null
           id: string
+          interests: string[] | null
+          onboarding_completed: boolean | null
+          parenting_goals: string[] | null
           points: number | null
           updated_at: string
           username: string
@@ -315,8 +320,13 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          children?: Json | null
           created_at?: string
+          display_name?: string | null
           id: string
+          interests?: string[] | null
+          onboarding_completed?: boolean | null
+          parenting_goals?: string[] | null
           points?: number | null
           updated_at?: string
           username: string
@@ -324,8 +334,13 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          children?: Json | null
           created_at?: string
+          display_name?: string | null
           id?: string
+          interests?: string[] | null
+          onboarding_completed?: boolean | null
+          parenting_goals?: string[] | null
           points?: number | null
           updated_at?: string
           username?: string

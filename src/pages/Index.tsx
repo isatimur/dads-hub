@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CategoryList } from "@/components/CategoryList";
 import { RulesSidebar } from "@/components/RulesSidebar";
@@ -21,6 +21,24 @@ const Index = () => {
   const navigate = useNavigate();
   const supabase = useSupabaseClient();
   const { data: posts, isLoading, error } = usePosts(selectedCategory);
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      if (session?.user) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("onboarding_completed")
+          .eq("id", session.user.id)
+          .single();
+
+        if (!error && data && !data.onboarding_completed) {
+          navigate("/onboarding");
+        }
+      }
+    };
+
+    checkOnboarding();
+  }, [session, supabase, navigate]);
 
   const handleSubscribe = async () => {
     try {
