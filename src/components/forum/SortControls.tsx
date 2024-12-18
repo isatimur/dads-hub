@@ -1,40 +1,41 @@
-import { Button } from "@/components/ui/button";
-import { Flame, Sparkles, Clock } from "lucide-react";
-import { SortOption } from "@/utils/postSorting";
+import { Button } from "../ui/button";
+import { Flame, Clock, ThumbsUp } from "lucide-react";
+
+export type SortOption = "hot" | "new" | "top";
 
 interface SortControlsProps {
   sortBy: SortOption;
-  onSortChange: (sort: SortOption) => void;
+  onSortChange: (option: SortOption) => void;
 }
 
 export const SortControls = ({ sortBy, onSortChange }: SortControlsProps) => {
   return (
-    <div className="flex items-center gap-4 mb-6 animate-fade-up">
+    <div className="flex gap-2">
       <Button
         variant={sortBy === "hot" ? "default" : "ghost"}
+        size="sm"
         onClick={() => onSortChange("hot")}
-        className="group"
+        className="gap-2"
       >
-        <Flame className="w-4 h-4 mr-2 transition-all duration-300 
-          group-hover:scale-110 group-hover:rotate-12" />
+        <Flame className="w-4 h-4" />
         Hot
       </Button>
       <Button
         variant={sortBy === "new" ? "default" : "ghost"}
+        size="sm"
         onClick={() => onSortChange("new")}
-        className="group"
+        className="gap-2"
       >
-        <Sparkles className="w-4 h-4 mr-2 transition-all duration-300 
-          group-hover:scale-110 group-hover:rotate-12" />
+        <Clock className="w-4 h-4" />
         New
       </Button>
       <Button
         variant={sortBy === "top" ? "default" : "ghost"}
+        size="sm"
         onClick={() => onSortChange("top")}
-        className="group"
+        className="gap-2"
       >
-        <Clock className="w-4 h-4 mr-2 transition-all duration-300 
-          group-hover:scale-110 group-hover:rotate-12" />
+        <ThumbsUp className="w-4 h-4" />
         Top
       </Button>
     </div>
