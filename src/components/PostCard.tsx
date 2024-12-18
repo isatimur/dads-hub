@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@supabase/auth-helpers-react";
 import { CommentSection } from "./CommentSection";
+import { ContentModeration } from "./moderation/ContentModeration";
 
 interface PostCardProps {
   id: string;
@@ -183,6 +184,12 @@ export const PostCard = ({
             Posted by <span className="font-medium text-gray-900">{author}</span>
           </div>
         </div>
+
+        <ContentModeration
+          contentId={id}
+          contentType="post"
+          authorId={author?.id}
+        />
 
         {showComments && (
           <div className="mt-6 animate-fade-in">

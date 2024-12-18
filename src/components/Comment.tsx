@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { CommentHeader } from "./comment/CommentHeader";
 import { CommentActions } from "./comment/CommentActions";
 import { CommentEditor } from "./comment/CommentEditor";
+import { ContentModeration } from "./moderation/ContentModeration";
 
 interface CommentProps {
   id: string;
@@ -152,6 +153,11 @@ export const Comment = ({
             onEdit={() => setIsEditing(true)}
             onDelete={handleDelete}
             showModifyActions={session?.user?.id === author?.id}
+          />
+          <ContentModeration
+            contentId={id}
+            contentType="comment"
+            authorId={author?.id}
           />
         </>
       )}
