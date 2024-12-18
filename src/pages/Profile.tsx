@@ -4,12 +4,18 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import { AdminProfile } from "@/components/admin/AdminProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { ProfilePicture } from "@/components/profile/ProfilePicture";
+import { ChildrenManager } from "@/components/profile/ChildrenManager";
+
+interface Child {
+  name: string;
+  age: string;
+}
 
 const Profile = () => {
   const session = useSession();
@@ -18,8 +24,12 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [children, setChildren] = useState<Child[]>([]);
+  const [parentingGoals, setParentingGoals] = useState<string[]>([]);
+  const [interests, setInterests] = useState<string[]>([]);
 
   useEffect(() => {
     if (!session) {
@@ -32,7 +42,7 @@ const Profile = () => {
         setLoading(true);
         const { data, error } = await supabase
           .from("profiles")
-          .select("username, bio, avatar_url")
+          .select("username, bio, avatar_url, display_name, children, parenting_goals, interests")
           .eq("id", session.user.id)
           .single();
 
@@ -40,8 +50,12 @@ const Profile = () => {
 
         if (data) {
           setUsername(data.username);
+          setDisplayName(data.display_name || "");
           setBio(data.bio || "");
           setAvatarUrl(data.avatar_url || "");
+          setChildren(data.children || []);
+          setParentingGoals(data.parenting_goals || []);
+          setInterests(data.interests || []);
         }
       } catch (error) {
         console.error("Profile fetch error:", error);
@@ -63,8 +77,12 @@ const Profile = () => {
         .from("profiles")
         .update({
           username,
+          display_name: displayName,
           bio,
           avatar_url: avatarUrl,
+          children,
+          parenting_goals: parentingGoals,
+          interests,
         })
         .eq("id", session.user.id);
 
@@ -103,18 +121,11 @@ const Profile = () => {
             <div className="bg-white rounded-lg shadow p-6 space-y-6">
               <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
               
-              <div className="flex items-center space-x-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src={avatarUrl || undefined} />
-                  <AvatarFallback>{username?.charAt(0)?.toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <Input
-                  placeholder="Avatar URL"
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="flex-1"
-                />
-              </div>
+              <ProfilePicture
+                url={avatarUrl}
+                onUpload={(url) => setAvatarUrl(url)}
+                username={username}
+              />
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Username</label>
@@ -122,6 +133,15 @@ const Profile = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Username"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Display Name</label>
+                <Input
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Display Name"
                 />
               </div>
 
@@ -134,6 +154,11 @@ const Profile = () => {
                   rows={4}
                 />
               </div>
+
+              <ChildrenManager
+                children={children}
+                onChange={setChildren}
+              />
 
               <Button 
                 onClick={updateProfile} 
