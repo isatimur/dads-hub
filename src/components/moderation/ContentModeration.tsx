@@ -39,6 +39,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .eq("content_id", contentId)
         .maybeSingle();
 
+      // Only throw if it's not a "no rows returned" error
       if (error && error.code !== "PGRST116") throw error;
       return data;
     },
