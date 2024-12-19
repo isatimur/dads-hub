@@ -26,6 +26,8 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing RESEND_API_KEY");
     }
 
+    console.log("Sending email to:", emailRequest.to);
+    
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -41,6 +43,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     const data = await res.json();
+    console.log("Resend API response:", data);
 
     if (!res.ok) {
       throw new Error(data.message || "Failed to send email");
