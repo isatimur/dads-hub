@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Camera, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ProfilePictureProps {
   url: string | null;
@@ -51,16 +52,28 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
   };
 
   return (
-    <div className="flex items-center gap-4">
-      <Avatar className="h-20 w-20">
-        <AvatarImage src={url || undefined} />
-        <AvatarFallback>{username?.charAt(0)?.toUpperCase()}</AvatarFallback>
-      </Avatar>
+    <div className="flex items-center gap-6">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Avatar className="h-24 w-24 ring-2 ring-primary/20 transition-all hover:ring-4">
+              <AvatarImage src={url || undefined} className="object-cover" />
+              <AvatarFallback className="text-lg bg-primary/5">
+                {username?.charAt(0)?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Click the button to update your profile picture</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <div className="flex flex-col gap-2">
         <Button
           variant="outline"
           size="sm"
-          className="relative"
+          className="relative glass-button"
           disabled={uploading}
         >
           {uploading ? (
@@ -79,6 +92,9 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
             disabled={uploading}
           />
         </Button>
+        <p className="text-xs text-muted-foreground">
+          Recommended: Square image, at least 400x400px
+        </p>
       </div>
     </div>
   );

@@ -4,13 +4,14 @@ import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Loader2, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { AdminProfile } from "@/components/admin/AdminProfile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProfilePicture } from "@/components/profile/ProfilePicture";
 import { ChildrenManager } from "@/components/profile/ChildrenManager";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Child {
   name: string;
@@ -102,7 +103,10 @@ const Profile = () => {
     return (
       <MainLayout>
         <div className="flex justify-center items-center h-[60vh]">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+            <p className="text-muted-foreground animate-pulse">Loading your profile...</p>
+          </div>
         </div>
       </MainLayout>
     );
@@ -110,16 +114,35 @@ const Profile = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="profile">Profile Settings</TabsTrigger>
-            <TabsTrigger value="admin">Achievements & Roles</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 glass-card">
+            <TabsTrigger value="profile" className="data-[state=active]:bg-primary/10">
+              Profile Settings
+            </TabsTrigger>
+            <TabsTrigger value="admin" className="data-[state=active]:bg-primary/10">
+              <Shield className="w-4 h-4 mr-2" />
+              Achievements & Roles
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="profile">
-            <div className="bg-white rounded-lg shadow p-6 space-y-6">
-              <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
+          <TabsContent value="profile" className="animate-fade-up">
+            <div className="glass-card p-6 space-y-6">
+              <div className="flex items-center justify-between border-b pb-4">
+                <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className="text-xs text-muted-foreground">
+                        Last updated: {new Date().toLocaleDateString()}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Profile information last modified</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               
               <ProfilePicture
                 url={avatarUrl}
@@ -127,22 +150,26 @@ const Profile = () => {
                 username={username}
               />
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Username</label>
-                <Input
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Username"
-                />
-              </div>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Username</label>
+                  <Input
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"
+                    className="glass-input"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Display Name</label>
-                <Input
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Display Name"
-                />
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Display Name</label>
+                  <Input
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="Display Name"
+                    className="glass-input"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -152,6 +179,7 @@ const Profile = () => {
                   onChange={(e) => setBio(e.target.value)}
                   placeholder="Tell us about yourself..."
                   rows={4}
+                  className="glass-input resize-none"
                 />
               </div>
 
@@ -163,15 +191,15 @@ const Profile = () => {
               <Button 
                 onClick={updateProfile} 
                 disabled={updating}
-                className="w-full"
+                className="w-full glass-button"
               >
                 {updating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Changes
+                {updating ? "Saving changes..." : "Save Changes"}
               </Button>
             </div>
           </TabsContent>
 
-          <TabsContent value="admin">
+          <TabsContent value="admin" className="animate-fade-up">
             <AdminProfile />
           </TabsContent>
         </Tabs>

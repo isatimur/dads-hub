@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, X } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Child {
   name: string;
@@ -43,27 +44,38 @@ export const ChildrenManager = ({ children, onChange }: ChildrenManagerProps) =>
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label>Children</Label>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={addChild}
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Child
-        </Button>
+        <Label className="text-base">Children</Label>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addChild}
+                className="glass-button"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Child
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Add information about your children</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       
       <div className="space-y-4">
         {childrenList.map((child, index) => (
-          <div key={index} className="flex gap-4 items-start">
+          <div key={index} className="flex gap-4 items-start animate-fade-up" style={{ animationDelay: `${index * 100}ms` }}>
             <div className="flex-1">
               <Label>Name</Label>
               <Input
                 value={child.name}
                 onChange={(e) => updateChild(index, "name", e.target.value)}
                 placeholder="Child's name"
+                className="glass-input mt-1"
               />
             </div>
             <div className="flex-1">
@@ -75,17 +87,27 @@ export const ChildrenManager = ({ children, onChange }: ChildrenManagerProps) =>
                 placeholder="Age"
                 min="0"
                 max="18"
+                className="glass-input mt-1"
               />
             </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="mt-6"
-              onClick={() => removeChild(index)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="mt-7 hover:bg-destructive/10 hover:text-destructive"
+                    onClick={() => removeChild(index)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Remove child</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         ))}
       </div>
