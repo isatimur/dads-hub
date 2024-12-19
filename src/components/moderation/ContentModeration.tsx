@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useSession } from "@supabase/auth-helpers-react";
-import { useQuery } from "@tanstack/react-query";
-import { Shield, CheckCircle, XCircle, Clock } from "lucide-react";
-import { Button } from "../ui/button";
-import { supabase } from "@/integrations/supabase/client";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Shield, AlertTriangle } from "lucide-react";
+import { sendModerationNotification } from "@/utils/notifications";
 
 interface ContentModerationProps {
   contentId: string;
@@ -15,142 +15,127 @@ interface ContentModerationProps {
 export const ContentModeration = ({ contentId, contentType, authorId }: ContentModerationProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const session = useSession();
+  const supabase = useSupabaseClient();
+  const queryClient = useQueryClient();
 
-  const { data: userRoles } = useQuery({
-    queryKey: ["userRoles", session?.user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("roles(name)")
-        .eq("user_id", session?.user?.id);
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!session?.user?.id,
-  });
-
-  const { data: moderationStatus, refetch } = useQuery({
-    queryKey: ["moderation", contentId],
+  const { data: moderationStatus } = useQuery({
+    queryKey: ["content_moderation", contentId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("content_moderation")
         .select("*")
         .eq("content_id", contentId)
-        .maybeSingle();
+        .single();
 
-      // Only throw if it's not a "no rows returned" error
-      if (error && error.code !== "PGRST116") throw error;
+      if (error) throw error;
       return data;
     },
   });
 
-  const isAdmin = userRoles?.some((role: any) => role.roles.name === "admin");
-  const isAuthor = session?.user?.id === authorId;
-
   const handleModeration = async (status: string, reason?: string) => {
-    if (!session || !isAdmin) return;
+    if (!session) return;
 
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const { error } = await supabase
         .from("content_moderation")
-        .upsert({
-          content_id: contentId,
-          content_type: contentType,
-          status,
-          moderator_id: session.user.id,
-          reason,
-        }, {
-          onConflict: "content_id",
-        });
+        .update({ status, reason, moderator_id: session.user.id })
+        .eq("content_id", contentId);
 
       if (error) throw error;
 
-      toast.success(`Content ${status} successfully`);
-      refetch();
+      // Get author's email
+      const { data: author, error: authorError } = await supabase
+        .from("profiles")
+        .select("email, username")
+        .eq("id", authorId)
+        .single();
+
+      if (authorError) throw authorError;
+
+      if (author?.email) {
+        await sendModerationNotification(author.email, {
+          recipientName: author.username,
+          moderationStatus: status,
+          moderationReason: reason,
+        });
+      }
+
+      toast.success("Moderation status updated");
+      queryClient.invalidateQueries({ queryKey: ["content_moderation"] });
     } catch (error) {
-      console.error("Moderation error:", error);
-      toast.error("Failed to moderate content");
+      console.error("Error updating moderation status:", error);
+      toast.error("Failed to update moderation status");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const renderStatus = () => {
-    if (!moderationStatus) {
-      return (
-        <div className="flex items-center gap-2 text-gray-500">
-          <Clock className="w-4 h-4" />
-          <span>Pending review</span>
-        </div>
-      );
+  const handleReport = async () => {
+    if (!session) {
+      toast.error("Please sign in to report content");
+      return;
     }
 
-    switch (moderationStatus.status) {
-      case "approved":
-        return (
-          <div className="flex items-center gap-2 text-green-600">
-            <CheckCircle className="w-4 h-4" />
-            <span>Approved</span>
-          </div>
-        );
-      case "rejected":
-        return (
-          <div className="flex items-center gap-2 text-red-600">
-            <XCircle className="w-4 h-4" />
-            <span>Rejected</span>
-            {moderationStatus.reason && (
-              <span className="text-sm text-gray-500">
-                - {moderationStatus.reason}
-              </span>
-            )}
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center gap-2 text-gray-500">
-            <Clock className="w-4 h-4" />
-            <span>Pending review</span>
-          </div>
-        );
+    try {
+      setIsLoading(true);
+      const { error } = await supabase
+        .from("content_reports")
+        .insert({
+          content_id: contentId,
+          content_type: contentType,
+          reporter_id: session.user.id,
+          status: "pending",
+        });
+
+      if (error) throw error;
+      toast.success("Content reported successfully");
+    } catch (error) {
+      console.error("Error reporting content:", error);
+      toast.error("Failed to report content");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (!isAdmin && !isAuthor) return null;
+  if (!session) return null;
 
   return (
-    <div className="mt-2 space-y-2">
-      {isAdmin && !moderationStatus?.status && (
-        <div className="flex items-center gap-2">
+    <div className="flex items-center space-x-2 mt-4">
+      {session.user?.user_metadata?.role === "moderator" && (
+        <>
           <Button
-            size="sm"
             variant="outline"
-            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+            size="sm"
             onClick={() => handleModeration("approved")}
             disabled={isLoading}
+            className="text-green-600 hover:text-green-700"
           >
-            <CheckCircle className="w-4 h-4 mr-1" />
+            <Shield className="w-4 h-4 mr-1" />
             Approve
           </Button>
           <Button
-            size="sm"
             variant="outline"
-            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-            onClick={() => handleModeration("rejected", "Violates community guidelines")}
+            size="sm"
+            onClick={() => handleModeration("flagged", "Content violates community guidelines")}
             disabled={isLoading}
+            className="text-red-600 hover:text-red-700"
           >
-            <XCircle className="w-4 h-4 mr-1" />
-            Reject
+            <AlertTriangle className="w-4 h-4 mr-1" />
+            Flag
           </Button>
-        </div>
+        </>
       )}
-      {(isAdmin || isAuthor) && (
-        <div className="flex items-center gap-2 text-sm">
-          <Shield className="w-4 h-4 text-primary" />
-          {renderStatus()}
-        </div>
-      )}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleReport}
+        disabled={isLoading}
+        className="text-gray-600 hover:text-gray-700"
+      >
+        <AlertTriangle className="w-4 h-4 mr-1" />
+        Report
+      </Button>
     </div>
   );
 };

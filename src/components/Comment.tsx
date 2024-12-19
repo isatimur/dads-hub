@@ -8,6 +8,7 @@ import { CommentHeader } from "./comment/CommentHeader";
 import { CommentActions } from "./comment/CommentActions";
 import { CommentEditor } from "./comment/CommentEditor";
 import { ContentModeration } from "./moderation/ContentModeration";
+import { sendCommentNotification } from "@/utils/notifications";
 
 interface CommentProps {
   id: string;
@@ -124,6 +125,39 @@ export const Comment = ({
     }
   };
 
+  const handleReply = async () => {
+    if (!session) {
+      toast.error("Please sign in to reply");
+      return;
+    }
+
+    try {
+      // Get the post author's email
+      const { data: postAuthor, error: authorError } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("id", author.id)
+        .single();
+
+      if (authorError) throw authorError;
+
+      if (postAuthor?.email) {
+        await sendCommentNotification(postAuthor.email, {
+          recipientName: author.username,
+          senderName: session.user?.email || "A user",
+          postTitle: "the discussion", // You might want to pass the post title as a prop
+          commentContent: content,
+        });
+      }
+
+      onReply(id);
+    } catch (error) {
+      console.error("Error sending notification:", error);
+      // Still allow the reply even if notification fails
+      onReply(id);
+    }
+  };
+
   return (
     <Card 
       className={`p-4 transition-all duration-300 hover:shadow-md
@@ -149,7 +183,7 @@ export const Comment = ({
             hasReacted={hasReacted}
             reactionCount={reactions?.length || 0}
             onReaction={handleReaction}
-            onReply={() => onReply(id)}
+            onReply={handleReply}
             onEdit={() => setIsEditing(true)}
             onDelete={handleDelete}
             showModifyActions={session?.user?.id === author?.id}
