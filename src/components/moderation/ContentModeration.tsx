@@ -44,7 +44,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
 
       if (error) throw error;
 
-      // Get author's email
+      // Get author's email and username
       const { data: author, error: authorError } = await supabase
         .from("profiles")
         .select("email, username")
@@ -56,6 +56,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
       if (author?.email) {
         await sendModerationNotification(author.email, {
           recipientName: author.username,
+          senderName: session.user?.email || "Moderator",
           moderationStatus: status,
           moderationReason: reason,
         });

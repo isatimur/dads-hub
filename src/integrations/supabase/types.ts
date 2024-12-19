@@ -309,6 +309,7 @@ export type Database = {
           children: Json | null
           created_at: string
           display_name: string | null
+          email: string | null
           id: string
           interests: string[] | null
           onboarding_completed: boolean | null
@@ -323,6 +324,7 @@ export type Database = {
           children?: Json | null
           created_at?: string
           display_name?: string | null
+          email?: string | null
           id: string
           interests?: string[] | null
           onboarding_completed?: boolean | null
@@ -337,6 +339,7 @@ export type Database = {
           children?: Json | null
           created_at?: string
           display_name?: string | null
+          email?: string | null
           id?: string
           interests?: string[] | null
           onboarding_completed?: boolean | null

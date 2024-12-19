@@ -8,7 +8,7 @@ import { CommentHeader } from "./comment/CommentHeader";
 import { CommentActions } from "./comment/CommentActions";
 import { CommentEditor } from "./comment/CommentEditor";
 import { ContentModeration } from "./moderation/ContentModeration";
-import { sendCommentNotification } from "@/utils/notifications";
+import { handleCommentNotification } from "./comment/NotificationHandler";
 
 interface CommentProps {
   id: string;
@@ -132,27 +132,25 @@ export const Comment = ({
     }
 
     try {
-      // Get the post author's email
-      const { data: postAuthor, error: authorError } = await supabase
-        .from("profiles")
-        .select("email")
-        .eq("id", author.id)
+      // Get post title for notification
+      const { data: post } = await supabase
+        .from("posts")
+        .select("title")
+        .eq("id", postId)
         .single();
 
-      if (authorError) throw authorError;
-
-      if (postAuthor?.email) {
-        await sendCommentNotification(postAuthor.email, {
-          recipientName: author.username,
-          senderName: session.user?.email || "A user",
-          postTitle: "the discussion", // You might want to pass the post title as a prop
-          commentContent: content,
-        });
+      if (post?.title) {
+        await handleCommentNotification(
+          author.id,
+          post.title,
+          content,
+          session.user?.email || "A user"
+        );
       }
 
       onReply(id);
     } catch (error) {
-      console.error("Error sending notification:", error);
+      console.error("Error handling reply:", error);
       // Still allow the reply even if notification fails
       onReply(id);
     }
