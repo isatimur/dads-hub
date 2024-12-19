@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -14,14 +14,15 @@ interface EmailRequest {
   html: string;
 }
 
-const handler = async (req: Request): Promise<Response> => {
+serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const emailRequest: EmailRequest = await req.json();
-    
+
     if (!RESEND_API_KEY) {
       throw new Error("Missing RESEND_API_KEY");
     }
@@ -50,19 +51,17 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     return new Response(JSON.stringify(data), {
-      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 200,
     });
   } catch (error) {
     console.error("Error sending email:", error);
     return new Response(
       JSON.stringify({ error: error.message }),
       {
-        status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
       }
     );
   }
-};
-
-serve(handler);
+});
