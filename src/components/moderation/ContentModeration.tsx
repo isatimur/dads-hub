@@ -25,9 +25,12 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .from("content_moderation")
         .select("*")
         .eq("content_id", contentId)
-        .maybeSingle(); // Changed from .single() to .maybeSingle()
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching moderation status:", error);
+        return null;
+      }
       return data;
     },
   });
@@ -39,7 +42,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
       setIsLoading(true);
       const { error } = await supabase
         .from("content_moderation")
-        .upsert({ // Changed from update to upsert since we might need to create a new record
+        .upsert({
           content_id: contentId,
           content_type: contentType,
           status,
@@ -56,9 +59,9 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .eq("id", authorId)
         .single();
 
-      if (authorError) throw authorError;
-
-      if (author?.email) {
+      if (authorError) {
+        console.error("Error fetching author details:", authorError);
+      } else if (author?.email) {
         await sendModerationNotification(author.email, {
           recipientName: author.username,
           senderName: session.user?.email || "Moderator",
