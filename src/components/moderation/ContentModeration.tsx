@@ -25,7 +25,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .from("content_moderation")
         .select("*")
         .eq("content_id", contentId)
-        .single();
+        .maybeSingle(); // Changed from .single() to .maybeSingle()
 
       if (error) throw error;
       return data;
@@ -39,8 +39,13 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
       setIsLoading(true);
       const { error } = await supabase
         .from("content_moderation")
-        .update({ status, reason, moderator_id: session.user.id })
-        .eq("content_id", contentId);
+        .upsert({ // Changed from update to upsert since we might need to create a new record
+          content_id: contentId,
+          content_type: contentType,
+          status,
+          reason,
+          moderator_id: session.user.id
+        });
 
       if (error) throw error;
 
