@@ -8,8 +8,7 @@ import { ForumHeader } from "@/components/forum/ForumHeader";
 import { SortControls } from "@/components/forum/SortControls";
 import { PostList } from "@/components/forum/PostList";
 import { sortPosts, SortOption } from "@/utils/postSorting";
-import { Loader2, ArrowRight, Users2, Shield, MessageSquare, Heart, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProUpgradeButton } from "@/components/subscription/ProUpgradeButton";
@@ -25,14 +24,23 @@ const Index = () => {
   useEffect(() => {
     const checkOnboarding = async () => {
       if (session?.user) {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("onboarding_completed")
-          .eq("id", session.user.id)
-          .single();
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("onboarding_completed")
+            .eq("id", session.user.id)
+            .single();
 
-        if (!error && data && !data.onboarding_completed) {
-          navigate("/onboarding");
+          if (error) {
+            console.error("Error checking onboarding status:", error);
+            return;
+          }
+
+          if (!data?.onboarding_completed) {
+            navigate("/onboarding");
+          }
+        } catch (err) {
+          console.error("Error in checkOnboarding:", err);
         }
       }
     };
@@ -51,6 +59,7 @@ const Index = () => {
       }
 
       const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {},
         headers: {
           Authorization: `Bearer ${currentSession?.access_token}`,
         },
