@@ -8,7 +8,7 @@ import { ForumHeader } from "@/components/forum/ForumHeader";
 import { SortControls } from "@/components/forum/SortControls";
 import { PostList } from "@/components/forum/PostList";
 import { sortPosts, SortOption } from "@/utils/postSorting";
-import { Loader2 } from "lucide-react";
+import { Loader2, Users, Heart, Star, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { ProUpgradeButton } from "@/components/subscription/ProUpgradeButton";
@@ -97,7 +97,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
           {[
             {
-              icon: <Users2 className="w-10 h-10 text-primary" />,
+              icon: <Users className="w-10 h-10 text-primary" />,
               title: "Community",
               description: "Connect with like-minded fathers in a supportive environment",
               delay: "delay-[200ms]"
