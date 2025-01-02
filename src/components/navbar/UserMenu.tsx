@@ -1,5 +1,6 @@
-import { useSession } from "@supabase/auth-helpers-react";
-import { Link } from "react-router-dom";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,64 +10,68 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Settings, User } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { Settings, LogOut, User } from "lucide-react";
 import { toast } from "sonner";
 
 export const UserMenu = () => {
   const session = useSession();
-
-  if (!session?.user) return null;
+  const supabase = useSupabaseClient();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
-      toast.success("Signed out successfully");
+      toast.success("Вы успешно вышли из системы");
+      navigate("/auth");
     } catch (error) {
-      toast.error("Error signing out");
+      toast.error("Ошибка при выходе из системы");
     }
   };
+
+  if (!session?.user) return null;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full hover:bg-gray-100"
+        >
           <Avatar className="h-8 w-8">
-            <AvatarImage src={session.user.user_metadata.avatar_url} alt={session.user.email || ""} />
-            <AvatarFallback>{session.user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarImage
+              src={session.user.user_metadata.avatar_url}
+              alt={session.user.user_metadata.full_name}
+            />
+            <AvatarFallback>
+              {session.user.user_metadata.full_name?.[0] || "П"}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{session.user.email}</p>
+            <p className="text-sm font-medium leading-none">
+              {session.user.user_metadata.full_name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {session.user.user_metadata.username || session.user.email}
+              {session.user.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link to="/profile" className="cursor-pointer">
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </Link>
+        <DropdownMenuItem onClick={() => navigate("/profile")}>
+          <User className="mr-2 h-4 w-4" />
+          <span>Мой профиль</span>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/settings" className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </Link>
+        <DropdownMenuItem onClick={() => navigate("/settings")}>
+          <Settings className="mr-2 h-4 w-4" />
+          <span>Настройки</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer text-red-600 focus:text-red-600"
-          onClick={handleSignOut}
-        >
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>Выйти</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

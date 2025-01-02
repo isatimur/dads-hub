@@ -16,7 +16,7 @@ export const Navbar = () => {
           <Link to="/" className="flex items-center space-x-2 group">
             <Users className="w-8 h-8 text-primary transition-colors duration-200 group-hover:text-secondary" />
             <span className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-200">
-              DadSpace
+              Отец Молодец
             </span>
           </Link>
           
@@ -25,7 +25,7 @@ export const Navbar = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors duration-200 group-hover:text-primary" />
               <input
                 type="text"
-                placeholder="Search discussions..."
+                placeholder="Поиск обсуждений..."
                 className="w-full pl-10 pr-4 py-2 rounded-full bg-gray-100 border-none focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 group-hover:bg-gray-200"
               />
             </div>
@@ -40,7 +40,7 @@ export const Navbar = () => {
               </>
             ) : (
               <Button asChild className="animate-fade-in hover:animate-bounce-subtle">
-                <Link to="/auth">Sign In</Link>
+                <Link to="/auth">Войти</Link>
               </Button>
             )}
           </div>

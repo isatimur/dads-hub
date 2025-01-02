@@ -9,6 +9,10 @@ import Index from "./pages/Index";
 import AuthPage from "./pages/Auth";
 import Profile from "./pages/Profile";
 import { OnboardingFlow } from "./components/onboarding/OnboardingFlow";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import { Contact } from "lucide-react";
+import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
 
@@ -20,10 +24,14 @@ const App = () => (
         <SonnerToaster />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/onboarding" element={<OnboardingFlow />} />
+          <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/onboarding" element={<OnboardingFlow />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

@@ -23,23 +23,23 @@ export const WelcomeStep = ({
   return (
     <>
       <CardHeader>
-        <CardTitle>Welcome to DadSpace!</CardTitle>
-        <CardDescription>Let's start with your name</CardDescription>
+        <CardTitle>Добро пожаловать в Отец Молодец!</CardTitle>
+        <CardDescription>Давайте начнем с вашего имени</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="displayName">What should we call you?</Label>
+          <Label htmlFor="displayName">Как к вам обращаться?</Label>
           <Input
             id="displayName"
             value={displayName}
             onChange={(e) => onDisplayNameChange(e.target.value)}
-            placeholder="Display Name"
+            placeholder="Ваше имя"
           />
         </div>
       </CardContent>
       <CardFooter>
         <Button onClick={onNext} disabled={!displayName} className="w-full">
-          Next
+          Далее
         </Button>
       </CardFooter>
     </>

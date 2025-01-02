@@ -41,11 +41,11 @@ export const OnboardingFlow = () => {
 
       if (error) throw error;
 
-      toast.success("Profile updated successfully!");
+      toast.success("Профиль успешно обновлен!");
       navigate("/");
     } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
+      console.error("Ошибка при обновлении профиля:", error);
+      toast.error("Не удалось обновить профиль");
     } finally {
       setLoading(false);
     }

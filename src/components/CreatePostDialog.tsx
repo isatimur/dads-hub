@@ -15,23 +15,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100),
-  content: z.string().min(1, "Content is required"),
-  category_id: z.string().min(1, "Category is required"),
+  title: z.string().min(1, "Заголовок обязателен").max(100),
+  content: z.string().min(1, "Содержание обязательно"),
+  category_id: z.string().min(1, "Выберите категорию"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const contentPrompts = {
-  "emotional-intelligence": "Share your experience with helping your child process emotions...",
-  "quality-time": "Describe a meaningful activity that strengthened your bond...",
-  "personal-growth": "What's a parenting challenge that helped you grow...",
-  "work-life-balance": "How do you manage work responsibilities while staying present...",
-  "child-development": "Share insights about a developmental milestone...",
-  "family-traditions": "Describe a meaningful tradition you've started...",
-  "health-wellness": "What strategies help you maintain family health...",
-  "digital-parenting": "How do you approach screen time and technology...",
-  "financial-planning": "Share tips for securing your family's future..."
+  "emotional-intelligence": "Поделитесь опытом помощи ребенку в работе с эмоциями...",
+  "quality-time": "Опишите значимое событие/занятие, которое укрепило вашу связь...",
+  "personal-growth": "Какой родительский вызов помог вам вырасти...",
+  "work-life-balance": "Как вы совмещаете работу и присутствие в жизни ребенка...",
+  "child-development": "Поделитесь наблюдениями о важном этапе развития...",
+  "family-traditions": "Расскажите о значимой традиции, которую вы начали...",
+  "health-wellness": "Какие стратегии помогают поддерживать здоровье семьи...",
+  "digital-parenting": "Как вы подходите к использованию технологий и экранному времени...",
+  "financial-planning": "Поделитесь советами по обеспечению будущего семьи..."
 };
 
 interface Category {
@@ -47,7 +47,7 @@ export const CreatePostDialog = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const session = useSession();
   const queryClient = useQueryClient();
-  
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,12 +62,12 @@ export const CreatePostDialog = () => {
       const { data, error } = await supabase
         .from('categories')
         .select('*');
-      
+
       if (error) {
-        toast.error("Failed to load categories");
+        toast.error("Не удалось загрузить категории");
         return;
       }
-      
+
       if (data) {
         setCategories(data);
       }
@@ -78,7 +78,7 @@ export const CreatePostDialog = () => {
 
   const onSubmit = async (values: FormValues) => {
     if (!session?.user?.id) {
-      toast.error("You must be logged in to create a post");
+      toast.error("Для создания поста необходимо войти в систему");
       return;
     }
 
@@ -94,20 +94,20 @@ export const CreatePostDialog = () => {
 
       if (error) throw error;
 
-      toast.success("Post created successfully!");
+      toast.success("Пост успешно создан!");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       setOpen(false);
       form.reset();
     } catch (error) {
-      toast.error("Failed to create post");
-      console.error("Error creating post:", error);
+      toast.error("Не удалось создать пост");
+      console.error("Ошибка при создании поста:", error);
     }
   };
 
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categories.find(cat => cat.id === categoryId)?.slug || "");
     form.setValue("category_id", categoryId);
-    
+
     // Reset content field with new placeholder
     form.setValue("content", "");
   };
@@ -117,14 +117,14 @@ export const CreatePostDialog = () => {
       <DialogTrigger asChild>
         <Button className="hidden md:flex items-center space-x-2">
           <PenSquare className="w-4 h-4" />
-          <span>Share Your Experience</span>
+          <span>Поделиться опытом</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lightbulb className="w-5 h-5 text-primary" />
-            Share Your Parenting Journey
+            Поделитесь своим опытом отцовства
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -134,11 +134,11 @@ export const CreatePostDialog = () => {
               name="category_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Категория</FormLabel>
                   <Select onValueChange={(value) => handleCategoryChange(value)} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue placeholder="Выберите категорию" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -158,11 +158,11 @@ export const CreatePostDialog = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Заголовок</FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="Give your post a clear, engaging title" 
-                      {...field} 
+                    <Input
+                      placeholder="Дайте вашему посту ясный, привлекательный заголовок"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -174,19 +174,19 @@ export const CreatePostDialog = () => {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Share Your Story</FormLabel>
+                  <FormLabel>Поделитесь историей</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder={contentPrompts[selectedCategory as keyof typeof contentPrompts] || "Share your experience..."} 
+                    <Textarea
+                      placeholder={contentPrompts[selectedCategory as keyof typeof contentPrompts] || "Поделитесь своим опытом..."}
                       className="min-h-[150px]"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Share with Community</Button>
+            <Button type="submit" className="w-full">Поделиться с сообществом</Button>
           </form>
         </Form>
       </DialogContent>

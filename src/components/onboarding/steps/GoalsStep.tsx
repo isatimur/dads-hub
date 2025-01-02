@@ -28,61 +28,75 @@ export const GoalsStep = ({
   onSubmit,
   loading,
 }: GoalsStepProps) => {
+  const parentingGoals = {
+    "Education": "Образование",
+    "Health": "Здоровье",
+    "Social Skills": "Социальные навыки",
+    "Creativity": "Творчество"
+  };
+
+  const parentingInterests = {
+    "Sports": "Спорт",
+    "Arts": "Искусство",
+    "Music": "Музыка",
+    "Science": "Наука",
+    "Nature": "Природа",
+    "Technology": "Технологии"
+  };
+
   return (
     <>
       <CardHeader>
-        <CardTitle>Almost done!</CardTitle>
-        <CardDescription>Select your parenting goals and interests</CardDescription>
+        <CardTitle>Почти готово!</CardTitle>
+        <CardDescription>Выберите ваши цели и интересы в воспитании</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>Parenting Goals</Label>
+          <Label>Цели воспитания</Label>
           <div className="flex flex-wrap gap-2">
-            {["Education", "Health", "Social Skills", "Creativity"].map((goal) => (
+            {Object.entries(parentingGoals).map(([key, value]) => (
               <Button
-                key={goal}
-                variant={goals.includes(goal) ? "default" : "outline"}
+                key={key}
+                variant={goals.includes(key) ? "default" : "outline"}
                 onClick={() =>
                   onGoalsChange(
-                    goals.includes(goal)
-                      ? goals.filter((g) => g !== goal)
-                      : [...goals, goal]
+                    goals.includes(key)
+                      ? goals.filter((g) => g !== key)
+                      : [...goals, key]
                   )
                 }
                 className="h-8"
               >
-                {goal}
+                {value}
               </Button>
             ))}
           </div>
         </div>
         <div className="space-y-2">
-          <Label>Interests</Label>
+          <Label>Интересы</Label>
           <div className="flex flex-wrap gap-2">
-            {["Sports", "Arts", "Music", "Science", "Nature", "Technology"].map(
-              (interest) => (
-                <Button
-                  key={interest}
-                  variant={interests.includes(interest) ? "default" : "outline"}
-                  onClick={() =>
-                    onInterestsChange(
-                      interests.includes(interest)
-                        ? interests.filter((i) => i !== interest)
-                        : [...interests, interest]
-                    )
-                  }
-                  className="h-8"
-                >
-                  {interest}
-                </Button>
-              )
-            )}
+            {Object.entries(parentingInterests).map(([key, value]) => (
+              <Button
+                key={key}
+                variant={interests.includes(key) ? "default" : "outline"}
+                onClick={() =>
+                  onInterestsChange(
+                    interests.includes(key)
+                      ? interests.filter((i) => i !== key)
+                      : [...interests, key]
+                  )
+                }
+                className="h-8"
+              >
+                {value}
+              </Button>
+            ))}
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex gap-2">
         <Button variant="outline" onClick={onBack} className="flex-1">
-          Back
+          Назад
         </Button>
         <Button
           onClick={onSubmit}
@@ -90,7 +104,7 @@ export const GoalsStep = ({
           className="flex-1"
         >
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Complete
+          Завершить
         </Button>
       </CardFooter>
     </>

@@ -87,10 +87,10 @@ const Index = () => {
       <div className="max-w-4xl mx-auto px-4 space-y-12">
         <div className="text-center space-y-6">
           <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-fade-up">
-            Welcome to DadSpace
+            Добро пожаловать в Отец Молодец
           </h1>
           <p className="text-2xl text-gray-600 max-w-2xl mx-auto animate-fade-up delay-100">
-            Join a supportive community of conscious fathers on their journey of growth and connection.
+            Присоединяйтесь к сообществу осознанных отцов на пути развития и общения.
           </p>
         </div>
 
@@ -98,20 +98,20 @@ const Index = () => {
           {[
             {
               icon: <Users className="w-10 h-10 text-primary" />,
-              title: "Community",
-              description: "Connect with like-minded fathers in a supportive environment",
+              title: "Сообщество",
+              description: "Общайтесь с единомышленниками в дружественной атмосфере",
               delay: "delay-[200ms]"
             },
             {
               icon: <Heart className="w-10 h-10 text-primary" />,
-              title: "Support",
-              description: "Share experiences and get advice from fellow dads",
+              title: "Поддержка",
+              description: "Делитесь опытом и получайте советы от других отцов",
               delay: "delay-[300ms]"
             },
             {
               icon: <Star className="w-10 h-10 text-primary" />,
-              title: "Growth",
-              description: "Learn and develop as a parent through shared wisdom",
+              title: "Развитие",
+              description: "Учитесь и развивайтесь как родитель через общую мудрость",
               delay: "delay-[400ms]"
             }
           ].map((feature, index) => (
@@ -139,10 +139,10 @@ const Index = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 animate-fade-up delay-600">
           {[
-            { label: "Active Members", value: "1,000+" },
-            { label: "Daily Discussions", value: "50+" },
-            { label: "Success Stories", value: "500+" },
-            { label: "Years of Wisdom", value: "10+" }
+            { label: "Активных участников", value: "1,000+" },
+            { label: "Ежедневных обсуждений", value: "50+" },
+            { label: "Историй успеха", value: "500+" },
+            { label: "Лет опыта", value: "10+" }
           ].map((stat, index) => (
             <div key={index} className="glass-card p-6 text-center hover:scale-105 transition-all duration-300">
               <div className="text-2xl font-bold text-primary mb-2">{stat.value}</div>
@@ -158,7 +158,7 @@ const Index = () => {
     return (
       <MainLayout>
         <div className="text-center text-red-500 animate-fade-in glass-panel p-6">
-          Error loading posts. Please try again later.
+          Ошибка загрузки публикаций. Пожалуйста, попробуйте позже.
         </div>
       </MainLayout>
     );

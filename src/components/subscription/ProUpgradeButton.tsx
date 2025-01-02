@@ -23,17 +23,17 @@ export const ProUpgradeButton = () => {
   const handleSubscribe = async () => {
     try {
       setIsLoading(true);
-      
+
       if (!session) {
-        toast.error('Please sign in to upgrade');
+        toast.error('Пожалуйста, войдите, чтобы обновить');
         navigate('/auth');
         return;
       }
 
       const { data: { session: currentSession } } = await supabase.auth.getSession();
-      
+
       if (!currentSession) {
-        toast.error('Please sign in to upgrade');
+        toast.error('Пожалуйста, войдите, чтобы обновить');
         navigate('/auth');
         return;
       }
@@ -46,18 +46,18 @@ export const ProUpgradeButton = () => {
 
       if (error) {
         console.error('Error creating checkout session:', error);
-        toast.error('Failed to start checkout process');
+        toast.error('Не удалось начать процесс оплаты');
         return;
       }
 
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        toast.error('No checkout URL received');
+        toast.error('Не удалось получить URL для оплаты');
       }
     } catch (error) {
       console.error('Error creating checkout session:', error);
-      toast.error('Failed to start checkout process');
+      toast.error('Не удалось начать процесс оплаты');
     } finally {
       setIsLoading(false);
     }
@@ -66,22 +66,22 @@ export const ProUpgradeButton = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button 
+        <Button
           variant="default"
           className="bg-gradient-to-r from-primary via-accent to-secondary hover:opacity-90 transition-all duration-300 group"
         >
           <Crown className="w-4 h-4 mr-2 group-hover:animate-bounce-subtle" />
-          Upgrade to Pro
+          Обновить до Премиум
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Crown className="w-5 h-5 text-primary" />
-            DadSpace Pro Benefits
+            Премиум-функции Отец Молодец
           </DialogTitle>
           <DialogDescription>
-            Unlock premium features and support our community
+            Разблокируйте премиум-функции и поддержите наше сообщество
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
@@ -101,7 +101,7 @@ export const ProUpgradeButton = () => {
           </div>
           <div className="flex flex-col gap-2 mt-4">
             <div className="text-2xl font-bold text-center">
-              $9.99<span className="text-sm font-normal text-gray-500">/month</span>
+              $9.99<span className="text-sm font-normal text-gray-500">/месяц</span>
             </div>
             <Button
               onClick={handleSubscribe}
@@ -110,14 +110,14 @@ export const ProUpgradeButton = () => {
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <span className="animate-spin">⏳</span> Processing...
+                  <span className="animate-spin">⏳</span> Обрабатываем...
                 </span>
               ) : (
-                "Upgrade Now"
+                "Обновить сейчас"
               )}
             </Button>
             <p className="text-xs text-center text-gray-500 mt-2">
-              Cancel anytime. 30-day money-back guarantee.
+              Отмена в любое время. 30-дневный гарантийный срок.
             </p>
           </div>
         </div>

@@ -15,19 +15,19 @@ export const sendCommentNotification = async (
 ) => {
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2>Hey ${recipientName}! 👋</h2>
-      <p>${senderName || 'Someone'} replied to your post "${postTitle}":</p>
+      <h2>Привет, ${recipientName}! 👋</h2>
+      <p>${senderName || 'Кто-то'} ответил на ваш пост "${postTitle}":</p>
       <div style="padding: 15px; background: #f5f5f5; border-radius: 5px; margin: 15px 0;">
         "${commentContent}"
       </div>
-      <p>Join the conversation and keep the discussion going!</p>
-      <p>Best regards,<br/>The DadSpace Team</p>
+      <p>Присоединяйтесь к разговору и продолжайте обсуждение!</p>
+      <p>С наилучшими пожеланиями,<br/>Отец Молодец</p>
     </div>
   `;
 
   await sendEmail({
     to: [recipientEmail],
-    subject: `${senderName || 'Someone'} replied to your post on DadSpace`,
+    subject: `${senderName || 'Кто-то'} ответил на ваш пост на Отец Молодец`,
     html,
   });
 };
@@ -38,16 +38,16 @@ export const sendMentionNotification = async (
 ) => {
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2>Hey ${recipientName}! 👋</h2>
-      <p>${senderName || 'Someone'} mentioned you in "${postTitle}"</p>
-      <p>Check out the conversation and join in!</p>
-      <p>Best regards,<br/>The DadSpace Team</p>
+      <h2>Привет, ${recipientName}! 👋</h2>
+      <p>${senderName || 'Кто-то'} упомянул вас в "${postTitle}"</p>
+      <p>Проверьте разговор и присоединяйтесь!</p>
+      <p>С наилучшими пожеланиями,<br/>Отец Молодец</p>
     </div>
   `;
 
   await sendEmail({
     to: [recipientEmail],
-    subject: `${senderName || 'Someone'} mentioned you on DadSpace`,
+    subject: `${senderName || 'Кто-то'} упомянул вас в "${postTitle}" на Отец Молодец`,
     html,
   });
 };
@@ -58,18 +58,18 @@ export const sendModerationNotification = async (
 ) => {
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2>Content Moderation Update</h2>
-      <p>Hey ${recipientName},</p>
-      <p>Your content has been ${moderationStatus}.</p>
-      ${moderationReason ? `<p>Reason: ${moderationReason}</p>` : ''}
-      <p>If you have any questions, please contact our support team.</p>
-      <p>Best regards,<br/>The DadSpace Team</p>
+      <h2>Обновление модерации контента</h2>
+      <p>Привет, ${recipientName},</p>
+      <p>Ваш контент был ${moderationStatus}.</p>
+      ${moderationReason ? `<p>Причина: ${moderationReason}</p>` : ''}
+      <p>Если у вас есть вопросы, пожалуйста, обратитесь в нашу службу поддержки.</p>
+      <p>С наилучшими пожеланиями,<br/>Отец Молодец</p>
     </div>
   `;
 
   await sendEmail({
     to: [recipientEmail],
-    subject: `DadSpace Content Moderation Update`,
+    subject: `Обновление модерации контента на Отец Молодец`,
     html,
   });
 };

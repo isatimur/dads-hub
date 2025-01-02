@@ -44,50 +44,50 @@ export const ChildrenStep = ({
   return (
     <>
       <CardHeader>
-        <CardTitle>Tell us about your children</CardTitle>
-        <CardDescription>This helps us personalize your experience</CardDescription>
+        <CardTitle>Расскажите о ваших детях</CardTitle>
+        <CardDescription>Это поможет нам персонализировать ваш опыт</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {children.map((child, index) => (
           <div key={index} className="space-y-2">
             <div className="flex gap-4">
               <div className="flex-1">
-                <Label htmlFor={`childName${index}`}>Name</Label>
+                <Label htmlFor={`childName${index}`}>Имя</Label>
                 <Input
                   id={`childName${index}`}
                   value={child.name}
                   onChange={(e) => handleChildChange(index, "name", e.target.value)}
-                  placeholder="Child's name"
+                  placeholder="Имя ребенка"
                 />
               </div>
               <div className="w-24">
-                <Label htmlFor={`childAge${index}`}>Age</Label>
+                <Label htmlFor={`childAge${index}`}>Возраст</Label>
                 <Input
                   id={`childAge${index}`}
                   type="number"
                   min="0"
                   value={child.age || ""}
                   onChange={(e) => handleChildChange(index, "age", e.target.value)}
-                  placeholder="Age"
+                  placeholder="Возраст"
                 />
               </div>
             </div>
           </div>
         ))}
         <Button variant="outline" onClick={handleAddChild} className="w-full">
-          Add Another Child
+          Добавить ребенка
         </Button>
       </CardContent>
       <CardFooter className="flex gap-2">
         <Button variant="outline" onClick={onBack} className="flex-1">
-          Back
+          Назад
         </Button>
         <Button
           onClick={onNext}
           disabled={!children.some((child) => child.name && child.age > 0)}
           className="flex-1"
         >
-          Next
+          Далее
         </Button>
       </CardFooter>
     </>

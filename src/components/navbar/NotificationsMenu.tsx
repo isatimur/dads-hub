@@ -11,62 +11,82 @@ import {
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 
 export const NotificationsMenu = () => {
-  const session = useSession();
+  const [notifications, setNotifications] = useState<any[]>([]);
   const supabase = useSupabaseClient();
+  const session = useSession();
 
-  const { data: notifications = [], refetch: refetchNotifications } = useQuery({
-    queryKey: ["notifications", session?.user?.id],
-    queryFn: async () => {
-      if (!session?.user?.id) return [];
-      
-      console.log("Fetching notifications for user:", session.user.id);
-      
-      const { data, error } = await supabase
-        .from("notifications")
-        .select(`
-          *,
-          sender:profiles!notifications_sender_id_fkey(username),
-          post:posts(title)
-        `)
-        .eq("recipient_id", session.user.id)
-        .eq("read", false)
-        .order("created_at", { ascending: false });
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchNotifications();
+      subscribeToNotifications();
+    }
+  }, [session?.user?.id]);
 
-      if (error) {
-        console.error("Notifications fetch error:", error);
-        throw error;
-      }
-      
-      console.log("Fetched notifications:", data);
-      return data || [];
-    },
-    enabled: !!session?.user?.id,
-  });
+  const fetchNotifications = async () => {
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*, sender:profiles(*), post:posts(*)')
+      .eq('recipient_id', session?.user?.id)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if (error) {
+      console.error('Error fetching notifications:', error);
+      return;
+    }
+
+    setNotifications(data || []);
+  };
+
+  const subscribeToNotifications = () => {
+    const channel = supabase
+      .channel('notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: `recipient_id=eq.${session?.user?.id}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            setNotifications((prev) => [payload.new, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  };
 
   const markAsRead = async (notificationId: string) => {
-    try {
-      const { error } = await supabase
-        .from("notifications")
-        .update({ read: true })
-        .eq("id", notificationId)
-        .eq("recipient_id", session?.user?.id);
+    const { error } = await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('id', notificationId);
 
-      if (error) throw error;
-      refetchNotifications();
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
-      toast.error("Failed to mark notification as read");
+    if (error) {
+      console.error('Error marking notification as read:', error);
+      return;
     }
+
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== notificationId)
+    );
   };
 
   const getNotificationContent = (notification: any) => {
     switch (notification.type) {
       case "comment":
-        return `${notification.sender?.username || 'Someone'} commented on your post "${notification.post?.title || 'a post'}"`;
+        return `${notification.sender?.username || 'Кто-то'} прокомментировал ваш пост "${notification.post?.title || 'пост'}"`;
       case "mention":
-        return `${notification.sender?.username || 'Someone'} mentioned you in a comment`;
+        return `${notification.sender?.username || 'Кто-то'} упомянул вас в комментарии`;
       default:
         return notification.content;
     }
@@ -85,11 +105,11 @@ export const NotificationsMenu = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 bg-background border-border shadow-lg">
-        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+        <DropdownMenuLabel>Уведомления</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
           <div className="p-4 text-sm text-gray-500 text-center">
-            No new notifications
+            Нет новых уведомлений
           </div>
         ) : (
           notifications.map((notification: any) => (
@@ -103,7 +123,7 @@ export const NotificationsMenu = () => {
                   {getNotificationContent(notification)}
                 </p>
                 <span className="text-xs text-gray-500">
-                  {new Date(notification.created_at).toLocaleDateString()}
+                  {new Date(notification.created_at).toLocaleDateString('ru-RU')}
                 </span>
               </div>
             </DropdownMenuItem>
