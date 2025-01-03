@@ -19,7 +19,7 @@ const AuthPage = () => {
   return (
     <MainLayout>
       <div className="max-w-md mx-auto glass-panel p-8 animate-fade-up">
-        <h1 className="text-2xl font-bold text-center mb-6">Добро пожаловать в Отец Молодец</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Welcome to DadSpace</h1>
         <Auth
           supabaseClient={supabase}
           appearance={{
