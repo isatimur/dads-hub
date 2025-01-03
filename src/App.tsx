@@ -21,6 +21,7 @@ const App = () => (
     <SessionContextProvider supabaseClient={supabase}>
       <TooltipProvider>
         <Toaster />
+        <SonnerToaster />
         <BrowserRouter>
           <Routes>
           <Route path="/" element={<Index />} />
