@@ -83,13 +83,17 @@ export const CreatePostDialog = () => {
     }
 
     try {
+      const slug = values.title
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(/[^\w-]+/g, '');
+
       const { error } = await supabase
-        .from("posts")
+        .from('posts')
         .insert({
-          title: values.title,
-          content: values.content,
-          category_id: values.category_id,
-          author_id: session.user.id,
+          ...values,
+          slug,
+          author_id: session?.user.id
         });
 
       if (error) throw error;

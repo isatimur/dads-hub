@@ -7,19 +7,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@supabase/auth-helpers-react";
 import { CommentSection } from "./CommentSection";
 import { ContentModeration } from "./moderation/ContentModeration";
+import { Link } from "react-router-dom";
 
 interface PostCardProps {
   id: string;
   title: string;
   content: string;
   author: {
-    id: string;
     username: string;
   };
-  category: string;
+  category: {
+    name: string;
+  };
   votes: number;
   comments: any[];
   timeAgo: string;
+  slug: string;
 }
 
 export const PostCard = ({
@@ -31,6 +34,7 @@ export const PostCard = ({
   votes: initialVotes,
   comments,
   timeAgo,
+  slug,
 }: PostCardProps) => {
   const [votes, setVotes] = useState(initialVotes);
   const [hasVoted, setHasVoted] = useState(false);
@@ -123,14 +127,16 @@ export const PostCard = ({
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors duration-200">
-            {category}
+            {category.name}
           </span>
           <span className="text-sm text-gray-500">{timeAgo}</span>
         </div>
         
-        <h3 className="text-xl font-semibold mb-3 text-gray-900 hover:text-primary transition-colors duration-200 line-clamp-2">
-          {title}
-        </h3>
+        <Link to={`/post/${slug}`}>
+          <h3 className="text-xl font-semibold mb-3 text-gray-900 hover:text-primary transition-colors duration-200">
+            {title}
+          </h3>
+        </Link>
         
         <div className="prose prose-sm max-w-none text-gray-600 mb-4 leading-relaxed overflow-hidden">
           {formattedContent}
@@ -191,7 +197,7 @@ export const PostCard = ({
         <ContentModeration
           contentId={id}
           contentType="post"
-          authorId={author.id}
+          authorId={author.username}
         />
 
         {showComments && (

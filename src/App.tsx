@@ -13,12 +13,15 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import { Contact } from "lucide-react";
 import FAQ from "./pages/FAQ";
+import { PostDetail } from "./pages/PostDetail";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <SessionContextProvider supabaseClient={supabase}>
+      <HelmetProvider>
       <TooltipProvider>
         <Toaster />
         <SonnerToaster />
@@ -32,9 +35,11 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/post/:slug" element={<PostDetail />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </HelmetProvider>
     </SessionContextProvider>
   </QueryClientProvider>
 );
