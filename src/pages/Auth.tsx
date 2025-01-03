@@ -1,13 +1,14 @@
 import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { supabase, ThemeSupa } from "@supabase/auth-ui-shared";
 import { useNavigate } from "react-router-dom";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { supabaseClient } from "@/lib/supabase";
 
 const AuthPage = () => {
   const session = useSession();
-  const supabase = useSupabaseClient();
+  const supabase = supabaseClient
   const navigate = useNavigate();
 
   useEffect(() => {
