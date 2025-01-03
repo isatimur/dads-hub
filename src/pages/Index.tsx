@@ -32,7 +32,7 @@ const Index = () => {
             .single();
 
           if (error) {
-            console.error("Error checking onboarding status:", error);
+            console.error("Ошибка проверки статуса onboarding:", error);
             return;
           }
 
@@ -40,7 +40,7 @@ const Index = () => {
             navigate("/onboarding");
           }
         } catch (err) {
-          console.error("Error in checkOnboarding:", err);
+          console.error("Ошибка в checkOnboarding:", err);
         }
       }
     };
@@ -53,7 +53,7 @@ const Index = () => {
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       
       if (!currentSession) {
-        toast.error('Please sign in to upgrade');
+        toast.error('Пожалуйста, войдите в систему, чтобы обновить');
         navigate('/auth');
         return;
       }
@@ -66,19 +66,19 @@ const Index = () => {
       });
 
       if (error) {
-        console.error('Error creating checkout session:', error);
-        toast.error('Failed to start checkout process');
+        console.error('Ошибка создания сессии для оплаты:', error);
+        toast.error('Не удалось начать процесс оплаты');
         return;
       }
 
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        toast.error('No checkout URL received');
+        toast.error('Не удалось получить URL для оплаты');
       }
     } catch (error) {
-      console.error('Error creating checkout session:', error);
-      toast.error('Failed to start checkout process');
+      console.error('Ошибка создания сессии для оплаты:', error);
+      toast.error('Не удалось начать процесс оплаты');
     }
   };
 
@@ -133,7 +133,7 @@ const Index = () => {
           
           <div className="flex items-center space-x-4 text-sm text-gray-500">
             <Shield className="w-4 h-4" />
-            <span>Safe and supportive environment</span>
+            <span>Безопасное и поддерживающее окружение</span>
           </div>
         </div>
 

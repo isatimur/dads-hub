@@ -56,7 +56,7 @@ export const AdminProfile = () => {
     toast.error("Failed to load profile data");
     return (
       <div className="p-4 text-red-500">
-        Error loading profile data. Please try again later.
+        Ошибка загрузки данных профиля. Пожалуйста, попробуйте позже.
       </div>
     );
   }
@@ -71,17 +71,17 @@ export const AdminProfile = () => {
         <StatsCard
           title="Points"
           value={profile?.points || 0}
-          description="Total points earned"
+          description="Всего баллов заработано"
         />
         <StatsCard
           title="Badges"
           value={profile?.user_badges?.length || 0}
-          description="Badges earned"
+          description="Всего достижений"
         />
         <StatsCard
           title="Roles"
           value={profile?.user_roles?.length || 0}
-          description="Community roles"
+          description="Всего ролей"
         />
       </div>
 

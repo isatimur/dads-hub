@@ -1,20 +1,20 @@
 id,name,slug,description,created_at
-0107dd5a-87af-46a7-a377-0dac12469dd2,Mental Health,mental-health,Supporting your child's mental well-being,2024-12-06 09:46:26.851552+00
-016ba310-d3f9-4a45-af9e-63e53a79e5f9,Social Skills,social-skills,Helping children develop healthy relationships,2024-12-06 09:46:26.851552+00
-11d87087-06bb-482a-b9fe-627c9790a96f,Toddlers,toddlers,Discussion about parenting toddlers,2024-12-06 09:44:36.846705+00
-19dcb9f5-4f9f-45ad-b591-05c8d873c698,Family Traditions,family-traditions,Creating lasting memories and family culture,2024-12-06 09:48:19.215245+00
-2c75fdfc-94b1-4130-9453-1c7bf913ad11,Work-Life Balance,work-life-balance,Managing career and family responsibilities,2024-12-06 09:48:19.215245+00
-4baaa0e3-c50f-45a7-88df-555bec04cd6e,Emotional Intelligence,emotional-intelligence,Building emotional awareness and connection with your children,2024-12-06 09:46:26.851552+00
-60ddc15e-4ba3-4f4e-9310-e6251d21829a,Age-Specific Guidance,age-specific-guidance,Tips tailored to different age groups,2024-12-06 09:46:26.851552+00
-68b5f988-1e8e-435b-b7ba-3db58625b585,Health & Wellness,health-wellness,Physical and mental health for dads and kids,2024-12-06 09:48:19.215245+00
-73e43942-dde7-410c-9384-d7bf8cb7bb92,Quality Time,quality-time,Ideas for meaningful activities and bonding moments,2024-12-06 09:44:36.846705+00
-7948f025-0d62-46ba-8089-fcb98c3c7e59,Child Development,child-development,Understanding developmental stages and needs,2024-12-06 09:48:19.215245+00
-80ca9d76-692c-4810-81eb-fb848d876568,Educational Development,educational-development,Supporting your child's learning journey,2024-12-06 09:46:26.851552+00
-8b6ae4af-2977-4184-ad32-f8329d26bb6e,Financial Planning,financial-planning,Securing your family's future,2024-12-06 09:48:19.215245+00
-8daf613f-7485-4a36-a252-ee8a2f579502,Newborns,newborns,Everything about caring for newborns,2024-12-06 09:44:36.846705+00
-9321f222-10ec-4969-8a31-c9f6518a3c3b,Difficult Conversations,difficult-conversations,Guide for handling challenging topics with children,2024-12-06 09:46:26.851552+00
-99ef5fab-a9ed-4324-83b9-e6eabcea97e3,Teenagers,teenagers,Support and advice for parents of teenagers,2024-12-06 09:44:36.846705+00
-a409e683-c0e6-4aed-b19b-d8239e46a2fa,Behavioral Guidance,behavioral-guidance,Strategies for positive behavior reinforcement,2024-12-06 09:46:26.851552+00
-dee796a7-568b-4832-be8f-ab805a8349a5,Crisis Management,crisis-management,Handling difficult situations and emergencies,2024-12-06 09:46:26.851552+00
-e218722b-6f89-49f0-9e0e-517a4702b7c6,Personal Growth,personal-growth,Developing yourself to be a better father,2024-12-06 09:48:19.215245+00
-ec0ab105-bb67-420f-af8e-21cbcb61086a,Digital Parenting,digital-parenting,Navigating technology and screen time,2024-12-06 09:48:19.215245+00
+0107dd5a-87af-46a7-a377-0dac12469dd2,Ментальное здоровье,mental-health,Поддержка психологического благополучия вашего ребенка,2024-12-06 09:46:26.851552+00
+016ba310-d3f9-4a45-af9e-63e53a79e5f9,Социальные навыки,social-skills,Помощь детям в развитии здоровых отношений,2024-12-06 09:46:26.851552+00
+11d87087-06bb-482a-b9fe-627c9790a96f,Малыши,toddlers,Обсуждение воспитания малышей,2024-12-06 09:44:36.846705+00
+19dcb9f5-4f9f-45ad-b591-05c8d873c698,Семейные традиции,family-traditions,Создание долгих воспоминаний и семейной культуры,2024-12-06 09:48:19.215245+00
+2c75fdfc-94b1-4130-9453-1c7bf913ad11,Баланс работы и жизни,work-life-balance,Управление карьерой и семейными обязанностями,2024-12-06 09:48:19.215245+00
+4baaa0e3-c50f-45a7-88df-555bec04cd6e,Эмоциональный интеллект,emotional-intelligence,Развитие эмоциональной осознанности и связи с детьми,2024-12-06 09:46:26.851552+00
+60ddc15e-4ba3-4f4e-9310-e6251d21829a,Советы по возрастам,age-specific-guidance,Рекомендации для разных возрастных групп,2024-12-06 09:46:26.851552+00
+68b5f988-1e8e-435b-b7ba-3db58625b585,Здоровье и благополучие,health-wellness,Физическое и психическое здоровье пап и детей,2024-12-06 09:48:19.215245+00
+73e43942-dde7-410c-9384-d7bf8cb7bb92,Значимое время,quality-time,Идеи для значимых занятий и моментов общения,2024-12-06 09:44:36.846705+00
+7948f025-0d62-46ba-8089-fcb98c3c7e59,Развитие ребенка,child-development,Понимание этапов развития и потребностей,2024-12-06 09:48:19.215245+00
+80ca9d76-692c-4810-81eb-fb848d876568,Образование,educational-development,Поддержка образовательного пути вашего ребенка,2024-12-06 09:46:26.851552+00
+8b6ae4af-2977-4184-ad32-f8329d26bb6e,Финансовое планирование,financial-planning,Обеспечение будущего вашей семьи,2024-12-06 09:48:19.215245+00
+8daf613f-7485-4a36-a252-ee8a2f579502,Новорожденные,newborns,Всё о заботе о новорожденных,2024-12-06 09:44:36.846705+00
+9321f222-10ec-4969-8a31-c9f6518a3c3b,Разговоры о сложных темах,difficult-conversations,Руководство по обсуждению сложных тем с детьми,2024-12-06 09:46:26.851552+00
+99ef5fab-a9ed-4324-83b9-e6eabcea97e3,Подростки,teenagers,Поддержка и советы для родителей подростков,2024-12-06 09:44:36.846705+00
+a409e683-c0e6-4aed-b19b-d8239e46a2fa,Поведение,behavioral-guidance,Стратегии позитивного подкрепления поведения,2024-12-06 09:46:26.851552+00
+dee796a7-568b-4832-be8f-ab805a8349a5,Управление кризисами,crisis-management,Как справляться со сложными ситуациями и чрезвычайными происшествиями,2024-12-06 09:46:26.851552+00
+e218722b-6f89-49f0-9e0e-517a4702b7c6,Личностный рост,personal-growth,Саморазвитие для того чтобы стать лучшим отцом,2024-12-06 09:48:19.215245+00
+ec0ab105-bb67-420f-af8e-21cbcb61086a,Цифровое воспитание,digital-parenting,Навигация по технологиям и экранному времени,2024-12-06 09:48:19.215245+00

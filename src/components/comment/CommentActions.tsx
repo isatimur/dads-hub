@@ -50,7 +50,7 @@ export const CommentActions = ({
       >
         <Reply className="w-4 h-4 mr-1 transition-all duration-300 
           group-hover:-translate-y-0.5 group-hover:rotate-[-8deg] group-hover:scale-110" />
-        Reply
+        Ответить
       </Button>
       {showModifyActions && (
         <>
@@ -63,7 +63,7 @@ export const CommentActions = ({
           >
             <Edit2 className="w-4 h-4 mr-1 transition-all duration-300 
               group-hover:rotate-12 group-hover:scale-110" />
-            Edit
+            Редактировать
           </Button>
           <Button
             variant="ghost"
@@ -75,7 +75,7 @@ export const CommentActions = ({
           >
             <Trash2 className="w-4 h-4 mr-1 transition-all duration-300 
               group-hover:rotate-12 group-hover:scale-110" />
-            Delete
+            Удалить
           </Button>
         </>
       )}

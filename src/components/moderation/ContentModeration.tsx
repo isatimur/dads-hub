@@ -28,7 +28,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .maybeSingle();
 
       if (error) {
-        console.error("Error fetching moderation status:", error);
+        console.error("Ошибка загрузки статуса модерации:", error);
         return null;
       }
       return data;
@@ -60,21 +60,21 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         .single();
 
       if (authorError) {
-        console.error("Error fetching author details:", authorError);
+        console.error("Ошибка загрузки данных автора:", authorError);
       } else if (author?.email) {
         await sendModerationNotification(author.email, {
           recipientName: author.username,
-          senderName: session.user?.email || "Moderator",
+          senderName: session.user?.email || "Модератор",
           moderationStatus: status,
           moderationReason: reason,
         });
       }
 
-      toast.success("Moderation status updated");
+      toast.success("Статус модерации обновлен");
       queryClient.invalidateQueries({ queryKey: ["content_moderation"] });
     } catch (error) {
-      console.error("Error updating moderation status:", error);
-      toast.error("Failed to update moderation status");
+      console.error("Ошибка обновления статуса модерации:", error);
+      toast.error("Не удалось обновить статус модерации");
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +82,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
 
   const handleReport = async () => {
     if (!session) {
-      toast.error("Please sign in to report content");
+      toast.error("Пожалуйста, войдите в систему, чтобы сообщить о контенте");
       return;
     }
 
@@ -98,10 +98,10 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         });
 
       if (error) throw error;
-      toast.success("Content reported successfully");
+      toast.success("Контент успешно сообщен");
     } catch (error) {
-      console.error("Error reporting content:", error);
-      toast.error("Failed to report content");
+      console.error("Ошибка сообщения контента:", error);
+      toast.error("Не удалось сообщить о контенте");
     } finally {
       setIsLoading(false);
     }
@@ -121,17 +121,17 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
             className="text-green-600 hover:text-green-700"
           >
             <Shield className="w-4 h-4 mr-1" />
-            Approve
+            Одобрить
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleModeration("flagged", "Content violates community guidelines")}
+            onClick={() => handleModeration("flagged", "Контент нарушает правила сообщества")}
             disabled={isLoading}
             className="text-red-600 hover:text-red-700"
           >
             <AlertTriangle className="w-4 h-4 mr-1" />
-            Flag
+            Флаг
           </Button>
         </>
       )}
@@ -143,7 +143,7 @@ export const ContentModeration = ({ contentId, contentType, authorId }: ContentM
         className="text-gray-600 hover:text-gray-700"
       >
         <AlertTriangle className="w-4 h-4 mr-1" />
-        Report
+        Сообщить
       </Button>
     </div>
   );

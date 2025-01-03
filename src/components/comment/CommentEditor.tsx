@@ -23,7 +23,7 @@ export const CommentEditor = ({
         className="min-h-[100px] transition-all duration-300 
           focus:ring-2 focus:ring-primary/50 hover:border-primary/50
           focus:scale-[1.01] rounded-xl"
-        placeholder="Edit your comment..."
+        placeholder="Редактировать комментарий..."
       />
       <div className="flex gap-2">
         <Button
@@ -34,7 +34,7 @@ export const CommentEditor = ({
         >
           <Check className="w-4 h-4 mr-2 transition-transform duration-300 
             group-hover:scale-110 group-hover:rotate-12" />
-          Save
+          Сохранить
         </Button>
         <Button
           size="sm"
@@ -45,7 +45,7 @@ export const CommentEditor = ({
         >
           <X className="w-4 h-4 mr-2 transition-transform duration-300 
             group-hover:rotate-90 group-hover:scale-110" />
-          Cancel
+          Отмена
         </Button>
       </div>
     </div>

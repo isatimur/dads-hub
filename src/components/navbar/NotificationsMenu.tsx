@@ -34,7 +34,7 @@ export const NotificationsMenu = () => {
       .limit(10);
 
     if (error) {
-      console.error('Error fetching notifications:', error);
+      console.error('Ошибка загрузки уведомлений:', error);
       return;
     }
 
@@ -72,7 +72,7 @@ export const NotificationsMenu = () => {
       .eq('id', notificationId);
 
     if (error) {
-      console.error('Error marking notification as read:', error);
+      console.error('Ошибка отметки уведомления как прочитанного:', error);
       return;
     }
 

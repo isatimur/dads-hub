@@ -22,7 +22,7 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
       setUploading(true);
 
       if (!event.target.files || event.target.files.length === 0) {
-        throw new Error("You must select an image to upload.");
+        throw new Error("Вы должны выбрать изображение для загрузки.");
       }
 
       const file = event.target.files[0];
@@ -42,10 +42,10 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
         .getPublicUrl(filePath);
 
       onUpload(data.publicUrl);
-      toast.success("Profile picture updated successfully");
+      toast.success("Фото профиля обновлено успешно");
     } catch (error) {
-      toast.error("Error uploading profile picture");
-      console.error("Error uploading profile picture:", error);
+      toast.error("Ошибка загрузки фото профиля");
+      console.error("Ошибка загрузки фото профиля:", error);
     } finally {
       setUploading(false);
     }
@@ -64,7 +64,7 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
             </Avatar>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Click the button to update your profile picture</p>
+            <p>Нажмите на кнопку, чтобы обновить ваше фото профиля</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -81,7 +81,7 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
           ) : (
             <>
               <Camera className="h-4 w-4 mr-2" />
-              Upload Picture
+              Загрузить фото
             </>
           )}
           <input
@@ -93,7 +93,7 @@ export const ProfilePicture = ({ url, onUpload, username }: ProfilePictureProps)
           />
         </Button>
         <p className="text-xs text-muted-foreground">
-          Recommended: Square image, at least 400x400px
+          Рекомендуется: квадратное изображение, минимум 400x400px
         </p>
       </div>
     </div>

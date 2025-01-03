@@ -22,7 +22,7 @@ export const PostList = ({ posts, isLoading }: PostListProps) => {
   if (posts.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500 animate-fade-in">
-        <p className="text-lg mb-4">No posts found in this category yet.</p>
+        <p className="text-lg mb-4">Пока нет постов в этой категории.</p>
       </div>
     );
   }
@@ -35,8 +35,8 @@ export const PostList = ({ posts, isLoading }: PostListProps) => {
           id={post.id}
           title={post.title}
           content={post.content}
-          author={post.author?.username || 'Anonymous'}
-          category={post.category?.name || 'Uncategorized'}
+          author={post.author?.username || 'Аноним'}
+          category={post.category?.name || 'Без категории'}
           votes={post.votes}
           comments={post.comments || []}
           timeAgo={new Date(post.created_at).toLocaleDateString()}

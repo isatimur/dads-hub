@@ -59,8 +59,8 @@ const Profile = () => {
           setInterests(data.interests || []);
         }
       } catch (error) {
-        console.error("Profile fetch error:", error);
-        toast.error("Error loading profile");
+        console.error("Ошибка получения профиля:", error);
+        toast.error("Ошибка загрузки профиля");
       } finally {
         setLoading(false);
       }
@@ -88,10 +88,10 @@ const Profile = () => {
         .eq("id", session.user.id);
 
       if (error) throw error;
-      toast.success("Profile updated successfully");
+      toast.success("Профиль обновлен успешно");
     } catch (error) {
-      console.error("Profile update error:", error);
-      toast.error("Error updating profile");
+      console.error("Ошибка обновления профиля:", error);
+      toast.error("Ошибка обновления профиля");
     } finally {
       setUpdating(false);
     }
@@ -105,7 +105,7 @@ const Profile = () => {
         <div className="flex justify-center items-center h-[60vh]">
           <div className="text-center space-y-4">
             <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-            <p className="text-muted-foreground animate-pulse">Loading your profile...</p>
+            <p className="text-muted-foreground animate-pulse">Загрузка вашего профиля...</p>
           </div>
         </div>
       </MainLayout>
@@ -118,27 +118,27 @@ const Profile = () => {
         <Tabs defaultValue="profile" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 glass-card">
             <TabsTrigger value="profile" className="data-[state=active]:bg-primary/10">
-              Profile Settings
+              Настройки профиля
             </TabsTrigger>
             <TabsTrigger value="admin" className="data-[state=active]:bg-primary/10">
               <Shield className="w-4 h-4 mr-2" />
-              Achievements & Roles
+              Достижения и роли
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="animate-fade-up">
             <div className="glass-card p-6 space-y-6">
               <div className="flex items-center justify-between border-b pb-4">
-                <h1 className="text-2xl font-bold text-gray-900">Profile Settings</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Настройки профиля</h1>
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
                       <div className="text-xs text-muted-foreground">
-                        Last updated: {new Date().toLocaleDateString()}
+                        Последнее обновление: {new Date().toLocaleDateString()}
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Profile information last modified</p>
+                      <p>Информация о профиле последнее обновление</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -152,7 +152,7 @@ const Profile = () => {
 
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Username</label>
+                  <label className="text-sm font-medium text-gray-700">Имя пользователя</label>
                   <Input
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -162,7 +162,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Display Name</label>
+                  <label className="text-sm font-medium text-gray-700">Имя для отображения</label>
                   <Input
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
@@ -173,11 +173,11 @@ const Profile = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Bio</label>
+                <label className="text-sm font-medium text-gray-700">Биография</label>
                 <Textarea
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  placeholder="Tell us about yourself..."
+                  placeholder="Расскажите о себе..."
                   rows={4}
                   className="glass-input resize-none"
                 />
@@ -194,7 +194,7 @@ const Profile = () => {
                 className="w-full glass-button"
               >
                 {updating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {updating ? "Saving changes..." : "Save Changes"}
+                {updating ? "Сохранение изменений..." : "Сохранить изменения"}
               </Button>
             </div>
           </TabsContent>

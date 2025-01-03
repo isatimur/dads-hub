@@ -54,10 +54,10 @@ export const Comment = ({
       if (error) throw error;
 
       setIsEditing(false);
-      toast.success("Comment updated successfully!");
+      toast.success("Комментарий обновлен успешно!");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
-      toast.error("Failed to update comment");
+      toast.error("Не удалось обновить комментарий");
     }
   };
 
@@ -72,10 +72,10 @@ export const Comment = ({
 
       if (error) throw error;
 
-      toast.success("Comment deleted successfully!");
+      toast.success("Комментарий удален успешно!");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
-      toast.error("Failed to delete comment");
+      toast.error("Не удалось удалить комментарий");
     }
   };
 
@@ -118,16 +118,16 @@ export const Comment = ({
       }
 
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      toast.success(hasReacted ? "Reaction removed" : "Reaction added!");
+      toast.success(hasReacted ? "Реакция удалена" : "Реакция добавлена!");
     } catch (error) {
-      console.error("Reaction error:", error);
-      toast.error("Failed to update reaction");
+      console.error("Ошибка реакции:", error);
+      toast.error("Не удалось обновить реакцию");
     }
   };
 
   const handleReply = async () => {
     if (!session) {
-      toast.error("Please sign in to reply");
+      toast.error("Пожалуйста, войдите в систему, чтобы ответить");
       return;
     }
 
@@ -144,13 +144,13 @@ export const Comment = ({
           author.id,
           post.title,
           content,
-          session.user?.email || "A user"
+          session.user?.email || "Пользователь"
         );
       }
 
       onReply(id);
     } catch (error) {
-      console.error("Error handling reply:", error);
+      console.error("Ошибка обработки ответа:", error);
       // Still allow the reply even if notification fails
       onReply(id);
     }

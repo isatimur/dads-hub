@@ -14,7 +14,7 @@ export const CommentHeader = ({ author, created_at }: CommentHeaderProps) => {
         <MessageCircle className="w-4 h-4 text-primary transition-transform 
           duration-300 group-hover:scale-110 group-hover:rotate-12" />
         <span className="font-medium text-primary transition-all duration-300 
-          group-hover:scale-105">{author?.username || "Anonymous"}</span>
+          group-hover:scale-105">{author?.username || "Аноним"}</span>
       </div>
       <span className="text-sm text-gray-500 transition-colors duration-300 
         group-hover:text-gray-700">

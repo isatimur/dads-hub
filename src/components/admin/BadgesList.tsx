@@ -25,8 +25,8 @@ interface BadgesListProps {
 export const BadgesList = ({ badges }: BadgesListProps) => (
   <Card className="hover:shadow-md transition-shadow duration-200">
     <CardHeader>
-      <CardTitle className="text-xl text-primary">Badges</CardTitle>
-      <CardDescription>Your earned achievements</CardDescription>
+      <CardTitle className="text-xl text-primary">Достижения</CardTitle>
+      <CardDescription>Ваши заработанные достижения</CardDescription>
     </CardHeader>
     <CardContent>
       <ScrollArea className="h-[200px] pr-4">

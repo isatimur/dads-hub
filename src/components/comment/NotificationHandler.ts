@@ -27,6 +27,6 @@ export const handleCommentNotification = async (
     }
   } catch (error) {
     console.error("Error sending notification:", error);
-    toast.error("Failed to send notification");
+    toast.error("Не удалось отправить уведомление");
   }
 };

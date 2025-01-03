@@ -15,8 +15,8 @@ interface RolesListProps {
 export const RolesList = ({ roles }: RolesListProps) => (
   <Card className="hover:shadow-md transition-shadow duration-200">
     <CardHeader>
-      <CardTitle className="text-xl text-primary">Roles</CardTitle>
-      <CardDescription>Your community roles</CardDescription>
+      <CardTitle className="text-xl text-primary">Роли</CardTitle>
+      <CardDescription>Ваши роли в сообществе</CardDescription>
     </CardHeader>
     <CardContent>
       <ScrollArea className="h-[200px] pr-4">

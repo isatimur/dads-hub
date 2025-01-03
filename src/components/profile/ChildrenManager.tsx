@@ -56,11 +56,11 @@ export const ChildrenManager = ({ children, onChange }: ChildrenManagerProps) =>
                 className="glass-button"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Child
+                Добавить ребенка
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Add information about your children</p>
+              <p>Добавить информацию о ваших детях</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -70,21 +70,21 @@ export const ChildrenManager = ({ children, onChange }: ChildrenManagerProps) =>
         {childrenList.map((child, index) => (
           <div key={index} className="flex gap-4 items-start animate-fade-up" style={{ animationDelay: `${index * 100}ms` }}>
             <div className="flex-1">
-              <Label>Name</Label>
+              <Label>Имя</Label>
               <Input
                 value={child.name}
                 onChange={(e) => updateChild(index, "name", e.target.value)}
-                placeholder="Child's name"
+                placeholder="Имя ребенка"
                 className="glass-input mt-1"
               />
             </div>
             <div className="flex-1">
-              <Label>Age</Label>
+              <Label>Возраст</Label>
               <Input
                 type="number"
                 value={child.age}
                 onChange={(e) => updateChild(index, "age", e.target.value)}
-                placeholder="Age"
+                placeholder="Возраст"
                 min="0"
                 max="18"
                 className="glass-input mt-1"
@@ -104,7 +104,7 @@ export const ChildrenManager = ({ children, onChange }: ChildrenManagerProps) =>
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Remove child</p>
+                  <p>Удалить ребенка</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

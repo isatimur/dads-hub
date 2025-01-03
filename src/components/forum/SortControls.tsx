@@ -18,7 +18,7 @@ export const SortControls = ({ sortBy, onSortChange }: SortControlsProps) => {
         className="gap-2"
       >
         <Flame className="w-4 h-4" />
-        Hot
+        Горячие
       </Button>
       <Button
         variant={sortBy === "new" ? "default" : "ghost"}
@@ -27,7 +27,7 @@ export const SortControls = ({ sortBy, onSortChange }: SortControlsProps) => {
         className="gap-2"
       >
         <Clock className="w-4 h-4" />
-        New
+        Новые
       </Button>
       <Button
         variant={sortBy === "top" ? "default" : "ghost"}
@@ -36,7 +36,7 @@ export const SortControls = ({ sortBy, onSortChange }: SortControlsProps) => {
         className="gap-2"
       >
         <ThumbsUp className="w-4 h-4" />
-        Top
+        Лучшие
       </Button>
     </div>
   );

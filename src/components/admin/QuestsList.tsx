@@ -19,8 +19,8 @@ interface QuestsListProps {
 export const QuestsList = ({ quests }: QuestsListProps) => (
   <Card className="hover:shadow-md transition-shadow duration-200">
     <CardHeader>
-      <CardTitle className="text-xl text-primary">Active Quests</CardTitle>
-      <CardDescription>Your ongoing challenges</CardDescription>
+      <CardTitle className="text-xl text-primary">Активные квесты</CardTitle>
+      <CardDescription>Ваши текущие задания</CardDescription>
     </CardHeader>
     <CardContent>
       <div className="space-y-6">
@@ -28,7 +28,7 @@ export const QuestsList = ({ quests }: QuestsListProps) => (
           const requirements = quest.requirements;
           const progress = quest.user_quests[0].progress;
           const isCompleted = quest.user_quests[0].completed_at;
-          
+
           const totalSteps = Object.keys(requirements).length;
           const completedSteps = Object.keys(progress).filter(
             (key) => progress[key] === true
@@ -47,12 +47,12 @@ export const QuestsList = ({ quests }: QuestsListProps) => (
                   </p>
                 </div>
                 <Badge variant={isCompleted ? "default" : "secondary"}>
-                  {isCompleted ? "Completed" : `${quest.points} points`}
+                  {isCompleted ? "Завершено" : `${quest.points} баллов`}
                 </Badge>
               </div>
-              <Progress 
-                value={progressPercentage} 
-                className="h-2 transition-all duration-500 ease-in-out" 
+              <Progress
+                value={progressPercentage}
+                className="h-2 transition-all duration-500 ease-in-out"
               />
             </div>
           );

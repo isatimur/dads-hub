@@ -59,7 +59,7 @@ export const PostCard = ({
 
   const handleVote = async () => {
     if (!session) {
-      toast.error("Please sign in to vote");
+      toast.error("Пожалуйста, войдите в систему, чтобы проголосовать");
       return;
     }
 
@@ -73,19 +73,19 @@ export const PostCard = ({
       if (error) throw error;
 
       setHasVoted(!hasVoted);
-      toast.success(hasVoted ? "Vote removed" : "Post upvoted!");
+      toast.success(hasVoted ? "Голос удален" : "Пост проголосован!");
     } catch (error) {
-      toast.error("Failed to update vote");
+      toast.error("Не удалось обновить голос");
     }
   };
 
   const handleSave = () => {
     if (!session) {
-      toast.error("Please sign in to save posts");
+      toast.error("Пожалуйста, войдите в систему, чтобы сохранить посты");
       return;
     }
     setIsSaved(!isSaved);
-    toast.success(isSaved ? "Post removed from saved items" : "Post saved for later");
+    toast.success(isSaved ? "Пост удален из сохраненных" : "Пост сохранен для позже");
   };
 
   const handleShare = async () => {
@@ -95,16 +95,16 @@ export const PostCard = ({
         text: content,
         url: window.location.href,
       });
-      toast.success("Post shared successfully!");
+      toast.success("Пост успешно поделен!");
     } catch (error) {
-      toast.info("Copied link to clipboard!");
+      toast.info("Ссылка скопирована в буфер обмена!");
       await navigator.clipboard.writeText(window.location.href);
     }
   };
 
   const handleComment = () => {
     if (!session) {
-      toast.error("Please sign in to comment");
+      toast.error("Пожалуйста, войдите в систему, чтобы оставить комментарий");
       return;
     }
     setShowComments(!showComments);
@@ -141,7 +141,7 @@ export const PostCard = ({
               onClick={() => setIsExpanded(!isExpanded)}
               className="mt-2 text-primary hover:text-primary/80"
             >
-              {isExpanded ? "Show less" : "Read more"}
+              {isExpanded ? "Показать меньше" : "Читать больше"}
             </Button>
           )}
         </div>
@@ -184,7 +184,7 @@ export const PostCard = ({
             </Button>
           </div>
           <div className="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
-            Posted by <span className="font-medium text-gray-900">{author.username}</span>
+            Опубликовано <span className="font-medium text-gray-900">{author.username}</span>
           </div>
         </div>
 

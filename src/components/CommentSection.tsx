@@ -35,14 +35,14 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) {
-      toast.error("Please sign in to comment", {
+      toast.error("Пожалуйста, войдите в систему, чтобы оставить комментарий", {
         icon: <MessageCircle className="w-4 h-4 text-destructive animate-bounce" />,
       });
       return;
     }
 
     if (!newComment.trim()) {
-      toast.error("Comment cannot be empty", {
+      toast.error("Комментарий не может быть пустым", {
         icon: <MessageCircle className="w-4 h-4 text-destructive animate-bounce" />,
       });
       return;
@@ -61,7 +61,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
       if (error) throw error;
 
       toast.success(
-        replyingTo ? "Reply added successfully!" : "Comment added successfully!", 
+        replyingTo ? "Ответ добавлен успешно!" : "Комментарий добавлен успешно!",
         {
           icon: <Sparkles className="w-4 h-4 text-primary animate-pulse" />,
           className: "animate-fade-in",
@@ -72,16 +72,16 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
       setIsTyping(false);
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     } catch (error) {
-      toast.error("Failed to add comment", {
+      toast.error("Не удалось добавить комментарий", {
         icon: <MessageCircle className="w-4 h-4 text-destructive animate-bounce" />,
       });
-      console.error("Error adding comment:", error);
+      console.error("Ошибка добавления комментария:", error);
     }
   };
 
   const handleReply = (parentId: string) => {
     if (!session) {
-      toast.error("Please sign in to reply", {
+      toast.error("Пожалуйста, войдите в систему, чтобы ответить", {
         icon: <MessageCircle className="w-4 h-4 text-destructive animate-bounce" />,
       });
       return;
@@ -107,7 +107,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
       <div className="flex items-center gap-2 mb-4 group hover:bg-primary/5 p-2 rounded-lg transition-all duration-300">
         <MessageSquare className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300 animate-bounce-subtle" />
         <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
-          {replyingTo ? "Write a Reply" : "Leave a Comment"}
+          {replyingTo ? "Написать ответ" : "Оставить комментарий"}
         </h3>
       </div>
 
@@ -116,8 +116,8 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
           <Textarea
             placeholder={
               replyingTo
-                ? "Write your thoughtful reply here..."
-                : "Share your thoughts with the community..."
+                ? "Напишите ваш разумный ответ здесь..."
+                : "Поделитесь своими мыслями с сообществом..."
             }
             value={newComment}
             onChange={(e) => {
@@ -148,7 +148,7 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
             className="transition-all duration-300 hover:bg-destructive/10 hover:text-destructive 
               hover:scale-105 active:scale-95 group rounded-xl shadow-sm"
           >
-            Cancel Reply
+            Отмена ответа
             <span className="ml-1 transition-transform duration-300 group-hover:rotate-90">×</span>
           </Button>
         )}
@@ -156,8 +156,8 @@ export const CommentSection = ({ postId, comments = [] }: CommentSectionProps) =
 
       <div className="space-y-6 mt-8">
         {Object.values(threadedComments).map((thread: any) => (
-          <div 
-            key={thread.id} 
+          <div
+            key={thread.id}
             className="space-y-4 animate-fade-up hover:bg-primary/5 p-4 rounded-xl 
               transition-all duration-300 hover:shadow-lg hover:shadow-primary/5
               hover:scale-[1.01] group"
