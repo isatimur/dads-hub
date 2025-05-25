@@ -19,8 +19,20 @@ export const Navbar = () => {
               Отец Молодец
             </span>
           </Link>
+
+          <div className="hidden md:flex items-center space-x-6 ml-6">
+            <Link to="/forums" className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">
+              Форумы
+            </Link>
+            <Link to="/resources" className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">
+              Ресурсы
+            </Link>
+            <Link to="/qna" className="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">
+              Вопросы и Ответы
+            </Link>
+          </div>
           
-          <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
+          <div className="hidden md:flex items-center flex-1 max-w-md mx-auto">
             <div className="relative w-full group">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 transition-colors duration-200 group-hover:text-primary" />
               <input

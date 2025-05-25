@@ -15,6 +15,9 @@ import { Contact } from "lucide-react";
 import FAQ from "./pages/FAQ";
 import { PostDetail } from "./pages/PostDetail";
 import { HelmetProvider } from "react-helmet-async";
+import ForumIndexPage from "./pages/forums/ForumIndexPage";
+import ForumCategoryPage from "./pages/forums/ForumCategoryPage";
+import ThreadPage from "./pages/threads/ThreadPage";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +38,10 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
+          {/* Forum Routes */}
+          <Route path="/forums" element={<ForumIndexPage />} />
+          <Route path="/forums/:categorySlug" element={<ForumCategoryPage />} />
+          <Route path="/threads/:threadId" element={<ThreadPage />} />
           <Route path="/post/:slug" element={<PostDetail />} />
           </Routes>
         </BrowserRouter>
