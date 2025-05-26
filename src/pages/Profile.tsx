@@ -24,13 +24,18 @@ const Profile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState(session?.user?.user_metadata?.avatar_url || "");
   const [children, setChildren] = useState<Child[]>([]);
   const [parentingGoals, setParentingGoals] = useState<string[]>([]);
   const [interests, setInterests] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (session?.user?.user_metadata?.avatar_url) {
+      setAvatarUrl(session.user.user_metadata.avatar_url);
+    }
+  }, [session?.user?.user_metadata?.avatar_url]);
 
   useEffect(() => {
     if (!session) {
@@ -43,17 +48,15 @@ const Profile = () => {
         setLoading(true);
         const { data, error } = await supabase
           .from("profiles")
-          .select("username, bio, avatar_url, display_name, children, parenting_goals, interests")
+          .select("display_name, bio, children, parenting_goals, interests")
           .eq("id", session.user.id)
           .single();
 
         if (error) throw error;
 
         if (data) {
-          setUsername(data.username);
           setDisplayName(data.display_name || "");
           setBio(data.bio || "");
-          setAvatarUrl(data.avatar_url || "");
           setChildren(data.children || []);
           setParentingGoals(data.parenting_goals || []);
           setInterests(data.interests || []);
@@ -77,10 +80,8 @@ const Profile = () => {
       const { error } = await supabase
         .from("profiles")
         .update({
-          username,
           display_name: displayName,
           bio,
-          avatar_url: avatarUrl,
           children,
           parenting_goals: parentingGoals,
           interests,
@@ -147,20 +148,9 @@ const Profile = () => {
               <ProfilePicture
                 url={avatarUrl}
                 onUpload={(url) => setAvatarUrl(url)}
-                username={username}
               />
 
               <div className="grid gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Имя пользователя</label>
-                  <Input
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"
-                    className="glass-input"
-                  />
-                </div>
-
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Имя для отображения</label>
                   <Input
